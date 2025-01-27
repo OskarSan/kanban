@@ -1,0 +1,30 @@
+.appBar {
+    background-color: #1a1a1a;
+}
+
+.toolBar {
+    background-color: #1a1a1a;
+}
+
+.loginButton{
+    background-color: #4CAF50;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.loginButton:hover {
+    background-color: #45a049;
+}
+
+.buttonSpacing {
+    margin-right: 106px;
+}
+
+.button:hover {
+    transition: color 0.3s ease;
+    color: #4CAF50;
+}
