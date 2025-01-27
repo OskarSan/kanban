@@ -1,0 +1,19 @@
+.card {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+    color: #f0f0f0;
+}
+
+.card.todo {
+    background-color: #ca2828;
+}
+
+.card.in-progress {
+    background-color: #e0c840;
+}
+
+.card.done {
+    background-color: #4caf50;
+}
