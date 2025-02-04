@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Card, CardContent, Typography, Grid2, Button } from '@mui/material';
 import './Board.css';
 import CardEntry from './CardEntry';
-
+import KanBanCard from './KanBanCard';
 
 interface kanBanCardContent {
     title: string;
@@ -10,7 +10,7 @@ interface kanBanCardContent {
     status: string;
 }
 
-interface KanBanCard {
+interface IKanBanCard {
     id: number;
     title: string;
     content: kanBanCardContent[];
@@ -20,7 +20,7 @@ interface KanBanCard {
 
 const Board: React.FC = () => {
     
-    const [cards, setCards] = React.useState<KanBanCard[]>([]);
+    const [cards, setCards] = React.useState<IKanBanCard[]>([]);
     
     useEffect(() => {
 
@@ -36,27 +36,12 @@ const Board: React.FC = () => {
         fetchCards();
     }, []);
 
-
-    
+  
 
     return (
         <Grid2 container spacing={2} className="boardGrid">
             {cards.map((card) => (
-                <Grid2 key={card.id} className="cardGrid">
-                    <Card>
-                        <CardContent>
-                            <Typography variant="h5" component="h2">
-                                {card.title}
-                            </Typography>
-                            {card.content.map((entry, index) => (
-                                <CardEntry key={index} title={entry.title} content={entry.content} status={entry.status} />
-                            ))}
-                        </CardContent>
-                        <div className="buttonContainer">
-                            <Button variant="contained" className="addTaskButton">Add task</Button>
-                        </div>
-                    </Card>
-                </Grid2>
+                <KanBanCard key={card.id} card={card}  />
             ))}
             <Button variant="contained" className="addCardButton">Add card</Button>
         </Grid2>

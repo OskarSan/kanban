@@ -15,6 +15,7 @@ const Card: React.FC<CardProps> = ({ title, content, status }) => {
         <div className={`card ${status}`}>
             <h2>{title}</h2>
             <p>{content}</p>
+            
         </div>
     )
 }
