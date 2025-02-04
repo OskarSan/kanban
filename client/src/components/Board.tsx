@@ -4,22 +4,22 @@ import './Board.css';
 import CardEntry from './CardEntry';
 
 
-interface cardContent {
+interface kanBanCardContent {
     title: string;
     content: string;
     status: string;
 }
 
-interface KanBanEntry {
+interface KanBanCard {
     id: number;
     title: string;
-    content: cardContent[];
+    content: kanBanCardContent[];
     status: string;
 }
 
 
 interface BoardProps {
-    cards: KanBanEntry[];
+    cards: KanBanCard[];
 }
 
 const Board: React.FC<BoardProps> = ({ cards }) => {

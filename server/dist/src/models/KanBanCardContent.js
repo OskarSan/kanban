@@ -33,13 +33,12 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.KanBanCard = void 0;
+exports.KanBanCardContent = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
-const kanBanCardSchema = new mongoose_1.Schema({
-    id: { type: Number, required: true },
+const kanBanCardContentSchema = new mongoose_1.Schema({
     title: { type: String, required: true },
-    content: { type: [mongoose_1.Schema.Types.ObjectId], ref: 'kanBanCardContent' },
+    content: { type: String, required: true },
     status: { type: String, required: true }
-}, { collection: 'kanBanCard' });
-const KanBanCard = mongoose_1.default.model('kanBanCard', kanBanCardSchema);
-exports.KanBanCard = KanBanCard;
+}, { collection: 'kanBanCardContent' });
+const KanBanCardContent = mongoose_1.default.model('kanBanCardContent', kanBanCardContentSchema);
+exports.KanBanCardContent = KanBanCardContent;
