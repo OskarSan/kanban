@@ -28,9 +28,15 @@ router.post('/api/addCard', async (req: Request, res: Response) => {
         res.status(500).json({message: error.message});
     }
 
+});
 
-
-
+router.get('/api/getCards', async (req: Request, res: Response) => {
+    try {
+        const cards = await KanBanCard.find().populate('content');
+        res.status(200).json(cards);
+    }catch(error: any) {
+        res.status(500).json({message: error.message});
+    }
 });
 
 

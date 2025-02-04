@@ -26,4 +26,13 @@ router.post('/api/addCard', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+router.get('/api/getCards', async (req, res) => {
+    try {
+        const cards = await KanBanCard_1.KanBanCard.find().populate('content');
+        res.status(200).json(cards);
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
 exports.default = router;
