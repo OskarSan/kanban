@@ -2,7 +2,7 @@
 import Header from './components/Header'
 import Board from './components/Board'
 
-
+/*
 const cardEntries = [
   { title: "tasku", content: "tasku content", status: "todo" },
   { title: "tasku2", content: "tasku2 sisältö", status: "in-progress" },
@@ -18,14 +18,14 @@ const cards = [
   { id: 3, title: 'Done', content: [cardEntries[2], cardEntries[0], cardEntries[1]], status: 'done' },
 
 ]
-
+*/
 
 function App() {
 
   return (
     <>
-      <Header />      
-      <Board cards = {cards}/>
+      <Header/>      
+      <Board/>
     </>
   )
 }

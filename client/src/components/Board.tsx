@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Card, CardContent, Typography, Grid2, Button } from '@mui/material';
 import './Board.css';
 import CardEntry from './CardEntry';
@@ -18,12 +18,27 @@ interface KanBanCard {
 }
 
 
-interface BoardProps {
-    cards: KanBanCard[];
-}
-
-const Board: React.FC<BoardProps> = ({ cards }) => {
+const Board: React.FC = () => {
     
+    const [cards, setCards] = React.useState<KanBanCard[]>([]);
+    
+    useEffect(() => {
+
+        const fetchCards = async () => {
+            try {
+                const response = await fetch('/api/getCards');
+                const data = await response.json();
+                setCards(data);
+            }catch (error) {
+                console.log(error);
+            }
+        };
+        fetchCards();
+    }, []);
+
+
+    
+
     return (
         <Grid2 container spacing={2} className="boardGrid">
             {cards.map((card) => (
@@ -43,6 +58,7 @@ const Board: React.FC<BoardProps> = ({ cards }) => {
                     </Card>
                 </Grid2>
             ))}
+            <Button variant="contained" className="addCardButton">Add card</Button>
         </Grid2>
     )
 }
