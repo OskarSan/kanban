@@ -36,7 +36,9 @@ const Board: React.FC = () => {
     }, []);
 
     const handleAddCard = async () => {
-        const newCard = {title: "New Card", content: [], status: "todo"};
+        var randomId = Math.floor(Math.random() * 1000);
+        const newCard = {id: randomId, title: "New Card", content: [], status: "todo"};
+        
         try {
             const response = await fetch('/api/addNewCard', {
                 method: 'POST',
@@ -46,7 +48,8 @@ const Board: React.FC = () => {
                 body: JSON.stringify(newCard)
             });
             const data = await response.json();
-            setCards([...cards, data.kanBanCard]);
+            console.log("card to be added: ", data);
+            setCards([...cards, data.akanBanCard]);
         }catch (error) {
             console.log("card adding failed:", error);
         }
