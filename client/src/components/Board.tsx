@@ -49,7 +49,7 @@ const Board: React.FC = () => {
             });
             const data = await response.json();
             console.log("card to be added: ", data);
-            setCards([...cards, data.akanBanCard]);
+            setCards([...cards, data.kanBanCard]);
         }catch (error) {
             console.log("card adding failed:", error);
         }
