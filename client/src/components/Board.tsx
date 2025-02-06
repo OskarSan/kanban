@@ -35,12 +35,46 @@ const Board: React.FC = () => {
         fetchCards();
     }, []);
 
-    const handleUpdateCard = (updatedCard: IKanBanCard) => {
+    const handleAddCard = async () => {
+        const newCard = {title: "New Card", content: [], status: "todo"};
+        try {
+            const response = await fetch('/api/addNewCard', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newCard)
+            });
+            const data = await response.json();
+            setCards([...cards, data.kanBanCard]);
+        }catch (error) {
+            console.log("card adding failed:", error);
+        }
+    }
+
+    const handleUpdateCard = async (updatedCard: IKanBanCard) => {
         console.log("updated card", updatedCard);
         setCards((prevCards) =>
             prevCards.map((card) => (card.id === updatedCard.id ? updatedCard : card))
         );
         console.log(cards)
+        try{
+            const res = await fetch('/api/updateCard', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedCard)
+            });
+            if (res.ok) {
+                const data = await res.json();
+                console.log("card udpated", data);
+            }else{
+                console.log("card updating failed");
+            }
+        }catch (error) {
+            console.log("card updating failed:", error);
+        }
       };
 
     return (
@@ -48,7 +82,7 @@ const Board: React.FC = () => {
             {cards.map((card) => (
                 <KanBanCard key={card.id} card={card} onUpdateCard={handleUpdateCard} />
             ))}
-            <Button variant="contained" className="addCardButton">Add card</Button>
+            <Button variant="contained" className="addCardButton" onClick={handleAddCard}>Add card</Button>
         </Grid2>
     )
 }

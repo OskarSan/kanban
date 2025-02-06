@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Card, CardContent, Typography, Grid2, Button } from '@mui/material';
 import CardEntry from './CardEntry';
 
@@ -22,15 +22,12 @@ interface CardProps {
 
 const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard}) => {
 
-    const [tasks, setTasks] = React.useState<kanBanCardContent[]>(card.content);
-
-
-
+    const [tasks, setTasks] = React.useState<kanBanCardContent[]>([]);
 
     //TODO
     const handleAddTask = async () => {
         const newTask = {title: "New Task", content: "New Content", status: "todo"};
-        
+
         try{
             const response = await fetch('/api/addNewTask', {
                 method: 'POST',
@@ -41,7 +38,10 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard}) => {
             });
     
             const data = await response.json();
+            console.log("task to be added: ", data.kanBanCardContent);
             setTasks([...tasks, data.kanBanCardContent]);
+
+            console.log("tasks: ",tasks)
             onUpdateCard({...card, content: [...card.content, data.kanBanCardContent]});
         
         }catch (error: any) {

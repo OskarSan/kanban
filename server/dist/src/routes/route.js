@@ -72,4 +72,13 @@ router.get('/api/getCards', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+router.get('/api/getTasks', async (req, res) => {
+    try {
+        const tasks = await KanBanCardContent_1.KanBanCardContent.find();
+        res.status(200).json(tasks);
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
 exports.default = router;

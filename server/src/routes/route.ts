@@ -89,6 +89,15 @@ router.get('/api/getCards', async (req: Request, res: Response) => {
     }
 });
 
+router.get('/api/getTasks', async (req: Request, res: Response) => {
+    try {
+        const tasks = await KanBanCardContent.find();
+        res.status(200).json(tasks);
+    }catch(error: any) {
+        res.status(500).json({message: error.message});
+    }
+});
+
 
 
 export default router
