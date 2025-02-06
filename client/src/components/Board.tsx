@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { Card, CardContent, Typography, Grid2, Button } from '@mui/material';
 import './Board.css';
-import CardEntry from './CardEntry';
 import KanBanCard from './KanBanCard';
 
 interface kanBanCardContent {
@@ -36,12 +35,18 @@ const Board: React.FC = () => {
         fetchCards();
     }, []);
 
-  
+    const handleUpdateCard = (updatedCard: IKanBanCard) => {
+        console.log("updated card", updatedCard);
+        setCards((prevCards) =>
+            prevCards.map((card) => (card.id === updatedCard.id ? updatedCard : card))
+        );
+        console.log(cards)
+      };
 
     return (
         <Grid2 container spacing={2} className="boardGrid">
             {cards.map((card) => (
-                <KanBanCard key={card.id} card={card}  />
+                <KanBanCard key={card.id} card={card} onUpdateCard={handleUpdateCard} />
             ))}
             <Button variant="contained" className="addCardButton">Add card</Button>
         </Grid2>

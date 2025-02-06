@@ -4,6 +4,7 @@ import CardEntry from './CardEntry';
 
 
 interface kanBanCardContent {
+    _id?: string;
     title: string;
     content: string;
     status: string;
@@ -16,48 +17,35 @@ interface CardProps {
         content: kanBanCardContent[];
         status: string;
     }
-    
+    onUpdateCard: (updatedCard: CardProps['card']) => void;
 }
 
+const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard}) => {
 
-const KanBanCard: React.FC<CardProps> = ({card}) => {
+    const [tasks, setTasks] = React.useState<kanBanCardContent[]>(card.content);
+
 
 
 
     //TODO
     const handleAddTask = async () => {
-        const newTask = {
-            title: "New task",
-            content: "New task content",
-            status: "todo"
-        }
-        card.content.push(newTask);
-
-
+        const newTask = {title: "New Task", content: "New Content", status: "todo"};
+        
         try{
-            const res = await fetch('/api/updateCard', {
+            const response = await fetch('/api/addNewTask', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    id: card.id,
-                    title: card.title,
-                    content: card.content,
-                    status: card.status
-                })
+                body: JSON.stringify(newTask)
             });
-
-            if (res.ok) {
-                const data = await res.json();
-                console.log('Task added successfully');
-                
-            }else {
-                console.error('Task not added');
-            }
-
-        }catch (error) {
-            console.log(error);
+    
+            const data = await response.json();
+            setTasks([...tasks, data.kanBanCardContent]);
+            onUpdateCard({...card, content: [...card.content, data.kanBanCardContent]});
+        
+        }catch (error: any) {
+            console.log("task adding failed:",error);
         }
     };
 

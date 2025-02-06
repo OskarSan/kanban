@@ -30,27 +30,39 @@ router.post('/api/addCard', async (req: Request, res: Response) => {
 
 });
 
+
+router.post('/api/addNewTask', async (req: Request, res: Response) => {
+
+    try {
+        const kanBanCardContent = new KanBanCardContent(req.body);
+        console.log(kanBanCardContent);
+        await kanBanCardContent.save();
+        res.status(200).json({kanBanCardContent});
+    }catch (error: any) {
+        res.status(500).json({message: error.message});
+    }
+
+
+});   
+
 //updates card content, whatever changes are made to the card
 //handles also the addition of a new cardEntry
+
 router.post('/api/updateCard', async (req: Request, res: Response) => {
     try {
-        const {id, title, content, status} = req.body;
+        const {_id, title, content, status} = req.body;
 
         const contentPromises = content.map(async (entry: IKanBanCardContent) => {
             if (entry._id) {
                 await KanBanCardContent.findByIdAndUpdate(entry._id, entry);
                 return entry._id;
-            }else {
-                const kanBanCardContent = new KanBanCardContent(entry);
-                await kanBanCardContent.save();
-                return kanBanCardContent._id;
             }
         });
 
         const contentIds = await Promise.all(contentPromises);
 
         const updatedCard = await KanBanCard.findByIdAndUpdate(
-            id, 
+            _id, 
             {
                 title: title,
                 content: contentIds,
@@ -61,7 +73,7 @@ router.post('/api/updateCard', async (req: Request, res: Response) => {
         if (!updatedCard) {
             res.status(404).json({ message: 'Card not found' });
         }
-        res.status(200).json({message: 'Card updated successfully'});
+        res.status(200).json({message: 'Card updated successfully', card: updatedCard});
 
     }catch (error: any) {
         res.status(500).json({message: error.message});

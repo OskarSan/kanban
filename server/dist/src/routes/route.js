@@ -26,24 +26,30 @@ router.post('/api/addCard', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+router.post('/api/addNewTask', async (req, res) => {
+    try {
+        const kanBanCardContent = new KanBanCardContent_1.KanBanCardContent(req.body);
+        console.log(kanBanCardContent);
+        await kanBanCardContent.save();
+        res.status(200).json({ kanBanCardContent });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
 //updates card content, whatever changes are made to the card
 //handles also the addition of a new cardEntry
 router.post('/api/updateCard', async (req, res) => {
     try {
-        const { id, title, content, status } = req.body;
+        const { _id, title, content, status } = req.body;
         const contentPromises = content.map(async (entry) => {
             if (entry._id) {
                 await KanBanCardContent_1.KanBanCardContent.findByIdAndUpdate(entry._id, entry);
                 return entry._id;
             }
-            else {
-                const kanBanCardContent = new KanBanCardContent_1.KanBanCardContent(entry);
-                await kanBanCardContent.save();
-                return kanBanCardContent._id;
-            }
         });
         const contentIds = await Promise.all(contentPromises);
-        const updatedCard = await KanBanCard_1.KanBanCard.findByIdAndUpdate(id, {
+        const updatedCard = await KanBanCard_1.KanBanCard.findByIdAndUpdate(_id, {
             title: title,
             content: contentIds,
             status: status
@@ -51,7 +57,7 @@ router.post('/api/updateCard', async (req, res) => {
         if (!updatedCard) {
             res.status(404).json({ message: 'Card not found' });
         }
-        res.status(200).json({ message: 'Card updated successfully' });
+        res.status(200).json({ message: 'Card updated successfully', card: updatedCard });
     }
     catch (error) {
         res.status(500).json({ message: error.message });
