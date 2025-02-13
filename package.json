@@ -21,6 +21,12 @@
     "start": "concurrently \"npm run client\" \"npm run server\""
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.4.3",
+    "@mui/material": "^6.4.3",
+    "@mui/styled-engine": "^6.4.3",
+    "@types/react": "^19.0.8",
     "concurrently": "^9.1.2"
   }
 }

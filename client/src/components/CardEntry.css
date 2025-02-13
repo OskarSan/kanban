@@ -1,3 +1,15 @@
+:root {
+    --todo-color: #ca2828;
+    --todo-border-color: #a02020; /* Darker red */
+
+    --in-progress-color: #e0c840;
+    --in-progress-border-color: #b89c30; /* Darker yellow */
+
+    --done-color: #4caf50;
+    --done-border-color: #388e3c; /* Darker green */
+}
+
+
 .card {
     font-family: 'Roboto', sans-serif;
     margin: 0;
@@ -7,13 +19,31 @@
 }
 
 .card.todo {
-    background-color: #ca2828;
+    background-color: var(--todo-color);
+}
+
+.card.todo .taskHeader {
+    border-bottom: 1px solid var(--todo-border-color);
 }
 
 .card.in-progress {
-    background-color: #e0c840;
+    background-color: var(--in-progress-color);
+}
+
+.card.in-progress .taskHeader {
+    border-bottom: 1px solid var(--in-progress-border-color);
 }
 
 .card.done {
-    background-color: #4caf50;
+    background-color: var(--done-color);
+}
+
+.card.done .taskHeader {
+    border-bottom: 1px solid var(--done-border-color);
+}
+
+.taskHeader {
+    display: flex;
+    align-items: center;
+    width: 100%;
 }
