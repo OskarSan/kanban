@@ -20,12 +20,20 @@ interface IKanBanCard {
 const Board: React.FC = () => {
     
     const [cards, setCards] = React.useState<IKanBanCard[]>([]);
-    
+    const token = localStorage.getItem('auth_token');
     useEffect(() => {
 
         const fetchCards = async () => {
+
+            if(!token) {
+                return;
+            }
             try {
-                const response = await fetch('/api/getCards');
+                const response = await fetch('/api/getCards', {
+                    headers: {
+                        "authorization": `Bearer ${token}`
+                    }
+                });
                 const data = await response.json();
                 setCards(data);
             }catch (error) {
@@ -33,7 +41,7 @@ const Board: React.FC = () => {
             }
         };
         fetchCards();
-    }, []);
+    }, [token]);
 
     const handleAddCard = async () => {
         var randomId = Math.floor(Math.random() * 1000);
@@ -85,7 +93,15 @@ const Board: React.FC = () => {
             {cards.map((card) => (
                 <KanBanCard key={card.id} card={card} onUpdateCard={handleUpdateCard} />
             ))}
-            <Button variant="contained" className="addCardButton" onClick={handleAddCard}>Add card</Button>
+            {token ? (
+                <Button variant="contained" className="addCardButton" onClick={handleAddCard}>
+                    Add card
+                </Button>
+            ) : (
+                <Typography variant="h6" color="textSecondary">
+                    Please log in to add cards.
+                </Typography>
+            )}
         </Grid2>
     )
 }

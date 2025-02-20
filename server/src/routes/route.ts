@@ -1,6 +1,7 @@
 import {Router, Request, Response} from 'express'; 
 import { KanBanCard, IKanBanCard } from '../models/KanBanCard';
 import { KanBanCardContent, IKanBanCardContent } from '../models/KanBanCardContent';
+import {validateToken} from '../middleware/validateToken';
 
 const router: Router = Router();
 
@@ -67,7 +68,7 @@ router.post('/api/updateCard', async (req: Request, res: Response) => {
     }
 });
 
-router.get('/api/getCards', async (req: Request, res: Response) => {
+router.get('/api/getCards', validateToken, async (req: Request, res: Response): Promise<void> => {
     try {
         const cards = await KanBanCard.find().populate('content');
         res.status(200).json(cards);

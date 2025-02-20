@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const KanBanCard_1 = require("../models/KanBanCard");
 const KanBanCardContent_1 = require("../models/KanBanCardContent");
+const validateToken_1 = require("../middleware/validateToken");
 const router = (0, express_1.Router)();
 router.post('/api/addNewCard', async (req, res) => {
     try {
@@ -52,7 +53,7 @@ router.post('/api/updateCard', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
-router.get('/api/getCards', async (req, res) => {
+router.get('/api/getCards', validateToken_1.validateToken, async (req, res) => {
     try {
         const cards = await KanBanCard_1.KanBanCard.find().populate('content');
         res.status(200).json(cards);
