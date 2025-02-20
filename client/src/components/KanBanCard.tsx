@@ -93,9 +93,8 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard}) => {
                             horizontal: 'left',
                             }}
                         >
-                            <MenuItem onClick={handleClose}>Profile</MenuItem>
-                            <MenuItem onClick={handleClose}>My account</MenuItem>
-                            <MenuItem onClick={handleClose}>Logout</MenuItem>
+                            <MenuItem onClick={handleClose}>Edit card</MenuItem>
+                            <MenuItem onClick={handleClose}>Delete card</MenuItem>
                         </Menu>
                     </div>
                 </div>  

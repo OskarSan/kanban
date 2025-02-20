@@ -64,9 +64,8 @@ const Card: React.FC<CardProps> = ({ title, content, status }) => {
                         horizontal: 'left',
                         }}
                     >
-                        <MenuItem onClick={handleClose}>Profile</MenuItem>
-                        <MenuItem onClick={handleClose}>My account</MenuItem>
-                        <MenuItem onClick={handleClose}>Logout</MenuItem>
+                        <MenuItem onClick={handleClose}>Edit Task</MenuItem>
+                        <MenuItem onClick={handleClose}>Delete Task</MenuItem>
                     </Menu>
                 </div>
             </div>
