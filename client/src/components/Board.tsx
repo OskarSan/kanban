@@ -34,9 +34,15 @@ const Board: React.FC = () => {
                         "authorization": `Bearer ${token}`
                     }
                 });
-                const data = await response.json();
-                setCards(data);
-            }catch (error) {
+                if (response.status === 400) {
+                    // Token is expired or invalid
+                    localStorage.removeItem('auth_token');
+                    return
+                } else {
+                    const data = await response.json();
+                    setCards(data);
+                }
+            } catch (error) {
                 console.log(error);
             }
         };
@@ -89,20 +95,24 @@ const Board: React.FC = () => {
       };
 
     return (
-        <Grid2 container spacing={2} className="boardGrid">
-            {cards.map((card) => (
-                <KanBanCard key={card.id} card={card} onUpdateCard={handleUpdateCard} />
-            ))}
+        <>
             {token ? (
-                <Button variant="contained" className="addCardButton" onClick={handleAddCard}>
-                    Add card
-                </Button>
+                <Grid2 container spacing={2} className="boardGrid">
+                    {cards.map((card) => (
+                        <KanBanCard key={card.id} card={card} onUpdateCard={handleUpdateCard} />
+                    ))}
+                    <Button variant="contained" className="addCardButton" onClick={handleAddCard}>
+                        Add card
+                    </Button>
+                </Grid2>
             ) : (
-                <Typography variant="h6" color="textSecondary">
-                    Please log in to add cards.
-                </Typography>
+                <Grid2 container spacing={2} className="boardGrid">
+                    <Typography variant="h6" color="textSecondary">
+                        Please log in to add cards.
+                    </Typography>
+                </Grid2>
             )}
-        </Grid2>
+        </>
     )
 }
 export default Board
