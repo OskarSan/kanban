@@ -12,11 +12,12 @@ interface CardProps {
     title: string;
     content: string;
     status: string;
+    onStatusChange: () => void;
 }
 
 
 
-const Card: React.FC<CardProps> = ({ title, content, status }) => {
+const Card: React.FC<CardProps> = ({ title, content, status, onStatusChange }) => {
     
     
     //menu
@@ -32,7 +33,7 @@ const Card: React.FC<CardProps> = ({ title, content, status }) => {
 
     
     return (
-        <div className={`card ${status}`}>
+        <div className={`card ${status}`} onClick={onStatusChange}>
             <div className = "taskHeader">
                 
                 <Typography variant="h5" component="h2" style={{ flexGrow: 1 }}>

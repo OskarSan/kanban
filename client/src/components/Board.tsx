@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Card, CardContent, Typography, Grid2, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import './Board.css';
 import KanBanCard from './KanBanCard';
 
@@ -21,6 +22,8 @@ const Board: React.FC = () => {
     
     const [cards, setCards] = React.useState<IKanBanCard[]>([]);
     const token = localStorage.getItem('auth_token');
+    const navigate = useNavigate();
+
     useEffect(() => {
 
         const fetchCards = async () => {
@@ -37,7 +40,7 @@ const Board: React.FC = () => {
                 if (response.status === 400) {
                     // Token is expired or invalid
                     localStorage.removeItem('auth_token');
-                    return
+                    navigate('/login');
                 } else {
                     const data = await response.json();
                     setCards(data);
@@ -47,7 +50,7 @@ const Board: React.FC = () => {
             }
         };
         fetchCards();
-    }, [token]);
+    }, [token, navigate]);
 
     const handleAddCard = async () => {
         var randomId = Math.floor(Math.random() * 1000);
@@ -57,14 +60,21 @@ const Board: React.FC = () => {
             const response = await fetch('/api/addNewCard', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify(newCard)
             });
-            const data = await response.json();
-            console.log("card to be added: ", data);
-            setCards([...cards, data.kanBanCard]);
-        }catch (error) {
+            if (response.status === 401) {
+                // Token is expired or invalid
+                localStorage.removeItem('auth_token');
+                navigate('/login');
+            } else {
+                const data = await response.json();
+                console.log("card to be added: ", data);
+                setCards([...cards, data.kanBanCard]);
+            }
+        } catch (error) {
             console.log("card adding failed:", error);
         }
     }
@@ -75,44 +85,41 @@ const Board: React.FC = () => {
             prevCards.map((card) => (card.id === updatedCard.id ? updatedCard : card))
         );
         console.log(cards)
-        try{
+        try {
             const res = await fetch('/api/updateCard', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify(updatedCard)
             });
-            if (res.ok) {
+            if (res.status === 401) {
+                // Token is expired or invalid
+                localStorage.removeItem('auth_token');
+                navigate('/login');
+            } else if (res.ok) {
                 const data = await res.json();
-                console.log("card udpated", data);
-            }else{
+                console.log("card updated", data);
+            } else {
                 console.log("card updating failed");
             }
-        }catch (error) {
+        } catch (error) {
             console.log("card updating failed:", error);
         }
       };
 
     return (
-        <>
-            {token ? (
-                <Grid2 container spacing={2} className="boardGrid">
-                    {cards.map((card) => (
-                        <KanBanCard key={card.id} card={card} onUpdateCard={handleUpdateCard} />
-                    ))}
-                    <Button variant="contained" className="addCardButton" onClick={handleAddCard}>
-                        Add card
-                    </Button>
-                </Grid2>
-            ) : (
-                <Grid2 container spacing={2} className="boardGrid">
-                    <Typography variant="h6" color="textSecondary">
-                        Please log in to add cards.
-                    </Typography>
-                </Grid2>
+        <Grid2 container spacing={2} className="boardGrid">
+            {cards.map((card) => (
+                <KanBanCard key={card.id} card={card} onUpdateCard={handleUpdateCard} />
+            ))}
+            {token && (
+                <Button variant="contained" className="addCardButton" onClick={handleAddCard}>
+                    Add card
+                </Button>
             )}
-        </>
+        </Grid2>
     )
 }
 export default Board

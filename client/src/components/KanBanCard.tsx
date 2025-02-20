@@ -26,6 +26,11 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard}) => {
 
     const [tasks, setTasks] = React.useState<kanBanCardContent[]>([]);
 
+    useEffect(() => {
+        setTasks(card.content);
+    }, [card.content]);
+
+    
     const handleAddTask = async () => {
         const newTask = {title: "New Task", content: "New Content", status: "todo"};
 
@@ -48,6 +53,31 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard}) => {
         }catch (error: any) {
             console.log("task adding failed:",error);
         }
+    };
+
+    const handleStatusChange = (taskId: string) => {
+        const updatedTasks = tasks.map(task => {
+            if (task._id === taskId) {
+                let newStatus;
+                switch (task.status) {
+                    case 'todo':
+                        newStatus = 'in-progress';
+                        break;
+                    case 'in-progress':
+                        newStatus = 'done';
+                        break;
+                    case 'done':
+                        newStatus = 'todo';
+                        break;
+                    default:
+                        newStatus = 'todo';
+                }
+                return { ...task, status: newStatus };
+            }
+            return task;
+        });
+        setTasks(updatedTasks);
+        onUpdateCard({ ...card, content: updatedTasks });
     };
 
     //menu
@@ -100,7 +130,7 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard}) => {
                 </div>  
                 <CardContent className="cardContent">
                     {card.content.map((entry, index) => (
-                        <CardEntry key={index} title={entry.title} content={entry.content} status={entry.status} />
+                        <CardEntry key={index} title={entry.title} content={entry.content} status={entry.status} onStatusChange={() => handleStatusChange(entry._id!)} />
                     ))}
                 </CardContent>
                 <div className="buttonContainer">
