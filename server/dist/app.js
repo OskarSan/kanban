@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const route_1 = __importDefault(require("./src/routes/route"));
+const userRoute_1 = __importDefault(require("./src/routes/userRoute"));
 const morgan_1 = __importDefault(require("morgan"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -25,6 +26,7 @@ app.use((0, cors_1.default)(corsOptions));
 app.use(express_1.default.json());
 app.use((0, morgan_1.default)('dev'));
 app.use("/", route_1.default);
+app.use("/user", userRoute_1.default);
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });

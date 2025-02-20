@@ -1,6 +1,7 @@
 import express, {Express} from 'express'; 
 
 import router from "./src/routes/route"
+import userRouter from "./src/routes/userRoute"
 
 import morgan from 'morgan';
 import mongoose, {Connection} from 'mongoose'
@@ -30,6 +31,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(morgan('dev'));
 app.use("/",router);
+app.use("/user",userRouter);
 
 
 
