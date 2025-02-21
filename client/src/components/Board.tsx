@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Grid2, Button } from '@mui/material';
+import { Grid2, Button, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import './Board.css';
 import KanBanCard from './KanBanCard';
@@ -114,10 +114,14 @@ const Board: React.FC = () => {
             {cards.map((card) => (
                 <KanBanCard key={card.id} card={card} onUpdateCard={handleUpdateCard} />
             ))}
-            {token && (
+            {token ? (
                 <Button variant="contained" className="addCardButton" onClick={handleAddCard}>
                     Add card
                 </Button>
+            ) : (
+                <Typography variant="h5" component="h2">
+                    Please login to view your cards
+                </Typography>
             )}
         </Grid2>
     )

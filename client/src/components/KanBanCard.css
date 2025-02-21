@@ -1,4 +1,6 @@
-
+:root {
+    cursor: default;
+}
 .cardHeader {
     display: flex;
     align-items: center;
