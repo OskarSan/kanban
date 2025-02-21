@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Card, CardContent, Typography, Grid2, Button } from '@mui/material';
+import { Grid2, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import './Board.css';
 import KanBanCard from './KanBanCard';
@@ -32,7 +32,7 @@ const Board: React.FC = () => {
                 return;
             }
             try {
-                const response = await fetch('/api/getCards', {
+                const response = await fetch('/api/getUsersCards', {
                     headers: {
                         "authorization": `Bearer ${token}`
                     }

@@ -3,13 +3,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const KanBanCard_1 = require("../models/KanBanCard");
 const KanBanCardContent_1 = require("../models/KanBanCardContent");
+const User_1 = require("../models/User");
 const validateToken_1 = require("../middleware/validateToken");
 const router = (0, express_1.Router)();
-router.post('/api/addNewCard', async (req, res) => {
+router.post('/api/addNewCard', validateToken_1.validateToken, async (req, res) => {
     try {
+        const userId = req.user?.id;
+        if (!userId) {
+            res.status(401).json({ message: 'User not authenticated' });
+            return;
+        }
         const kanBanCard = new KanBanCard_1.KanBanCard(req.body);
         console.log(kanBanCard);
         await kanBanCard.save();
+        const user = await User_1.User.findById(userId);
+        if (!user) {
+            res.status(404).json({ message: 'User not found' });
+            return;
+        }
+        user.cardIds.push(kanBanCard._id);
+        await user.save();
         res.status(200).json({ message: 'Card added successfully', kanBanCard });
     }
     catch (error) {
@@ -56,6 +69,25 @@ router.post('/api/updateCard', async (req, res) => {
 router.get('/api/getCards', validateToken_1.validateToken, async (req, res) => {
     try {
         const cards = await KanBanCard_1.KanBanCard.find().populate('content');
+        res.status(200).json(cards);
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+router.get('/api/getUsersCards', validateToken_1.validateToken, async (req, res) => {
+    try {
+        const userId = req.user?.id;
+        if (!userId) {
+            res.status(401).json({ message: 'User not authenticated' });
+            return;
+        }
+        const user = await User_1.User.findById(userId);
+        if (!user) {
+            res.status(404).json({ message: 'User not found' });
+            return;
+        }
+        const cards = await KanBanCard_1.KanBanCard.find({ _id: { $in: user.cardIds } }).populate('content');
         res.status(200).json(cards);
     }
     catch (error) {

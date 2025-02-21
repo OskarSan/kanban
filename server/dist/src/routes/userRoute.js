@@ -28,7 +28,8 @@ userRouter.post("/register", (0, express_validator_1.body)('username').isString(
         const hashedPassword = await bcrypt_1.default.hash(req.body.password, salt);
         await User_1.User.create({
             username: req.body.username,
-            password: hashedPassword
+            password: hashedPassword,
+            cardIds: []
         });
         res.status(201).json({ message: "User created" });
     }
@@ -51,9 +52,11 @@ userRouter.post("/login", (0, express_validator_1.body)('username').isString().t
             return;
         }
         else {
+            //cardIds maybe not needed here
             const JwtPayload = {
                 id: user._id,
-                username: user.username
+                username: user.username,
+                cardIds: user.cardIds
             };
             const token = jsonwebtoken_1.default.sign(JwtPayload, process.env.JWT_SECRET, { expiresIn: "5m" });
             res.status(200).json({ message: "Login successful", success: true, token: token });

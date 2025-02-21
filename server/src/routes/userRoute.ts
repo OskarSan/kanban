@@ -33,7 +33,8 @@ userRouter.post("/register",
 
             await User.create({
                 username: req.body.username,
-                password: hashedPassword
+                password: hashedPassword,
+                cardIds: []
             })
             res.status(201).json({message: "User created"})
 
@@ -61,9 +62,12 @@ userRouter.post("/login",
                 res.status(400).json({message: "Invalid password"})
                 return
             }else{
+
+                //cardIds maybe not needed here
                 const JwtPayload: JwtPayload = {
                     id: user._id,
-                    username: user.username
+                    username: user.username,
+                    cardIds: user.cardIds
                 }
                 const token: string = jwt.sign(JwtPayload, process.env.JWT_SECRET as string, {expiresIn: "5m"})
 
