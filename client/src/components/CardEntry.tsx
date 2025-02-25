@@ -4,7 +4,7 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Typography } from "@mui/material";
+import { Typography, TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 
 
 interface Task {
@@ -19,11 +19,12 @@ interface CardProps {
     task: Task;
     onStatusChange: () => void;
     onTaskDeleted: (taskId: string) => void;
+    onTaskUpdated: (updatedTask: Task) => void;
 }
 
 
 
-const Card: React.FC<CardProps> = ({ task, onStatusChange, onTaskDeleted }) => {
+const Card: React.FC<CardProps> = ({ task, onStatusChange, onTaskDeleted, onTaskUpdated }) => {
     
     
     //menu
@@ -53,7 +54,47 @@ const Card: React.FC<CardProps> = ({ task, onStatusChange, onTaskDeleted }) => {
         
     }
     
+    const [isEditing, setIsEditing] = React.useState(false);
+    const [editedTask, setEditedTask] = React.useState<Task>({...task})
     
+    const handleEditTask = () => {
+        setIsEditing(true);
+        setAnchorEl(null);
+    }
+
+
+    const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setEditedTask({...editedTask, [e.target.name]: e.target.value});
+    };
+
+
+    const handleEditSave = async () => {
+        try{
+            const res = await fetch('/api/editTask', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(editedTask)
+            });
+    
+            if (res.ok) {
+                onTaskUpdated(editedTask);
+                setIsEditing(false);
+            };
+    
+        }catch(error: any){
+            console.log(error);
+        }
+
+    }
+
+    const handleEditCancel = () => {
+        setIsEditing(false);
+        setEditedTask({...task});
+    };
+
+
     return (
         <div className={`card ${task.status}`}>
             <div className = "taskHeader">
@@ -87,7 +128,7 @@ const Card: React.FC<CardProps> = ({ task, onStatusChange, onTaskDeleted }) => {
                         horizontal: 'left',
                         }}
                     >
-                        <MenuItem onClick={handleClose}>Edit Task</MenuItem>
+                        <MenuItem onClick={handleEditTask}>Edit Task</MenuItem>
                         <MenuItem onClick={handleDeleteTask}>Delete Task</MenuItem>
                     </Menu>
                 </div>
@@ -95,7 +136,37 @@ const Card: React.FC<CardProps> = ({ task, onStatusChange, onTaskDeleted }) => {
             <div className="statusUpdateArea" onClick={onStatusChange}>
                 <p>{task.content}</p>
             </div>
-            
+
+            {/*Edit Task Dialog*/}
+            <Dialog open={isEditing} onClose={handleEditCancel}>
+                <DialogTitle>Edit Task</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        margin="dense"
+                        label="Title"
+                        name="title"
+                        value={editedTask.title}
+                        onChange={handleEditChange}
+                        fullWidth
+                    />
+                    <TextField
+                        margin="dense"
+                        label="Content"
+                        name="content"
+                        value={editedTask.content}
+                        onChange={handleEditChange}
+                        fullWidth
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleEditCancel} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleEditSave} color="primary">
+                        Save
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     )
 }

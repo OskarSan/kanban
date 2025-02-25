@@ -87,7 +87,13 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted}) =>
         setTasks(updatedTasks);
         onUpdateCard({ ...card, content: updatedTasks });
     };
-    
+
+    const handleTaskUpdated = (updatedTask: Task) => {
+        /*vvv fancy syntax asked from chatGPT :) vvv*/
+        const updatedTasks = tasks.map(task => task._id === updatedTask._id ? updatedTask : task);
+        setTasks(updatedTasks);
+        onUpdateCard({ ...card, content: updatedTasks });
+    };
     //menu
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -161,7 +167,7 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted}) =>
                 </div>  
                 <CardContent className="cardContent">
                     {card.content.map((entry, index) => (
-                        <CardEntry key={index} task={entry} onStatusChange={() => handleStatusChange(entry._id!)} onTaskDeleted={handleTaskDeleted} />
+                        <CardEntry key={index} task={entry} onStatusChange={() => handleStatusChange(entry._id!)} onTaskDeleted={handleTaskDeleted} onTaskUpdated={handleTaskUpdated} />
                     ))}
                 </CardContent>
                 <div className="buttonContainer">

@@ -152,8 +152,9 @@ router.get('/api/getTasks', async (req: Request, res: Response) => {
 router.post('/api/editTask', async (req: Request, res: Response) => {
     try{
         const { _id, title, description, status } = req.body;
+        console.log(_id)
         const task = await KanBanCardContent.findByIdAndUpdate(_id);
-
+        res.status(200).json({message: 'Task updated successfully', task});
     }catch(error: any) {
         res.status(500).json({message: error.message});
     }
