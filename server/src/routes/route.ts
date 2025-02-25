@@ -149,7 +149,7 @@ router.get('/api/getTasks', async (req: Request, res: Response) => {
 });
 
 
-router.post('api/editTask', async (req: Request, res: Response) => {
+router.post('/api/editTask', async (req: Request, res: Response) => {
     try{
         const { _id, title, description, status } = req.body;
         const task = await KanBanCardContent.findByIdAndUpdate(_id);
@@ -160,10 +160,11 @@ router.post('api/editTask', async (req: Request, res: Response) => {
     
 });
 
-router.post('api/deleteTask', async (req: Request, res: Response) => {
+router.post('/api/deleteTask', async (req: Request, res: Response) => {
 
     try{
         const { _id, title, description } = req.body;
+        console.log(_id)
         const task = await KanBanCardContent.findByIdAndDelete(_id, {title, description});
         if (!task) {
             res.status(404).json({ message: 'Task not found' });

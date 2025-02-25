@@ -7,49 +7,59 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Typography } from "@mui/material";
 
 
-
-interface CardProps {
+interface Task {
+    _id?: string;
     title: string;
     content: string;
     status: string;
+}
+
+
+interface CardProps {
+    task: Task;
     onStatusChange: () => void;
+    onTaskDeleted: (taskId: string) => void;
 }
 
 
 
-const Card: React.FC<CardProps> = ({ title, content, status, onStatusChange }) => {
+const Card: React.FC<CardProps> = ({ task, onStatusChange, onTaskDeleted }) => {
     
     
     //menu
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+        event.stopPropagation();
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
         setAnchorEl(null);
     };
-    /*
-    const handleDeleteTask = await () => {
+    
+    const handleDeleteTask = async () => {
         const res = await fetch('/api/deleteTask', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ })
+            body: JSON.stringify({_id: task._id})
         });
-    
+
+        if (res.ok) {
+            onTaskDeleted(task._id!);
+        }
         setAnchorEl(null);
         
     }
-    */
+    
     
     return (
-        <div className={`card ${status}`} onClick={onStatusChange}>
+        <div className={`card ${task.status}`}>
             <div className = "taskHeader">
                 
                 <Typography variant="h5" component="h2" style={{ flexGrow: 1 }}>
-                    {title}
+                    {task.title}
                 </Typography>
                 
                 <div>
@@ -78,12 +88,13 @@ const Card: React.FC<CardProps> = ({ title, content, status, onStatusChange }) =
                         }}
                     >
                         <MenuItem onClick={handleClose}>Edit Task</MenuItem>
-                        <MenuItem onClick={handleClose}>Delete Task</MenuItem>
+                        <MenuItem onClick={handleDeleteTask}>Delete Task</MenuItem>
                     </Menu>
                 </div>
             </div>
-
-            <p>{content}</p>
+            <div className="statusUpdateArea" onClick={onStatusChange}>
+                <p>{task.content}</p>
+            </div>
             
         </div>
     )

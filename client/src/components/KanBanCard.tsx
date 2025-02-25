@@ -5,7 +5,7 @@ import CardEntry from './CardEntry';
 import './KanBanCard.css';
 
 
-interface kanBanCardContent {
+interface Task {
     _id?: string;
     title: string;
     content: string;
@@ -16,7 +16,7 @@ interface CardProps {
     card: {
         id: number;
         title: string;
-        content: kanBanCardContent[];
+        content: Task[];
         status: string;
     }
     onUpdateCard: (updatedCard: CardProps['card']) => void;
@@ -26,7 +26,7 @@ interface CardProps {
 
 const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted}) => {
 
-    const [tasks, setTasks] = React.useState<kanBanCardContent[]>([]);
+    const [tasks, setTasks] = React.useState<Task[]>([]);
 
     useEffect(() => {
         setTasks(card.content);
@@ -82,7 +82,14 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted}) =>
         onUpdateCard({ ...card, content: updatedTasks });
     };
 
+    const handleTaskDeleted = (taskId: string) => {
+        const updatedTasks = tasks.filter(task => task._id !== taskId);
+        setTasks(updatedTasks);
+        onUpdateCard({ ...card, content: updatedTasks });
+    };
+    
     //menu
+
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -154,7 +161,7 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted}) =>
                 </div>  
                 <CardContent className="cardContent">
                     {card.content.map((entry, index) => (
-                        <CardEntry key={index} title={entry.title} content={entry.content} status={entry.status} onStatusChange={() => handleStatusChange(entry._id!)} />
+                        <CardEntry key={index} task={entry} onStatusChange={() => handleStatusChange(entry._id!)} onTaskDeleted={handleTaskDeleted} />
                     ))}
                 </CardContent>
                 <div className="buttonContainer">
