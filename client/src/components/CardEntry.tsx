@@ -29,8 +29,20 @@ const Card: React.FC<CardProps> = ({ title, content, status, onStatusChange }) =
     const handleClose = () => {
         setAnchorEl(null);
     };
-
-
+    /*
+    const handleDeleteTask = await () => {
+        const res = await fetch('/api/deleteTask', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ })
+        });
+    
+        setAnchorEl(null);
+        
+    }
+    */
     
     return (
         <div className={`card ${status}`} onClick={onStatusChange}>

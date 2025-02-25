@@ -66,6 +66,19 @@ router.post('/api/updateCard', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+router.post('/api/deleteCard', async (req, res) => {
+    try {
+        const { _id } = req.body;
+        const card = await KanBanCard_1.KanBanCard.findByIdAndDelete(_id);
+        if (!card) {
+            res.status(404).json({ message: 'Card not found' });
+        }
+        res.status(200).json({ message: 'Card deleted successfully', card });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
 router.get('/api/getCards', validateToken_1.validateToken, async (req, res) => {
     try {
         const cards = await KanBanCard_1.KanBanCard.find().populate('content');
@@ -98,6 +111,28 @@ router.get('/api/getTasks', async (req, res) => {
     try {
         const tasks = await KanBanCardContent_1.KanBanCardContent.find();
         res.status(200).json(tasks);
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+router.post('api/editTask', async (req, res) => {
+    try {
+        const { _id, title, description, status } = req.body;
+        const task = await KanBanCardContent_1.KanBanCardContent.findByIdAndUpdate(_id);
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+router.post('api/deleteTask', async (req, res) => {
+    try {
+        const { _id, title, description } = req.body;
+        const task = await KanBanCardContent_1.KanBanCardContent.findByIdAndDelete(_id, { title, description });
+        if (!task) {
+            res.status(404).json({ message: 'Task not found' });
+        }
+        res.status(200).json({ message: 'Task deleted successfully', task });
     }
     catch (error) {
         res.status(500).json({ message: error.message });

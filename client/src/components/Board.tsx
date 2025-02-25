@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Grid2, Button, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import './Board.css';
@@ -21,6 +21,7 @@ interface IKanBanCard {
 const Board: React.FC = () => {
     
     const [cards, setCards] = React.useState<IKanBanCard[]>([]);
+    const [fetchTrigger, setFetchTrigger] = useState(false);
     const token = localStorage.getItem('auth_token');
     const navigate = useNavigate();
 
@@ -50,7 +51,7 @@ const Board: React.FC = () => {
             }
         };
         fetchCards();
-    }, [token, navigate]);
+    }, [token, navigate, fetchTrigger]);
 
     const handleAddCard = async () => {
         var randomId = Math.floor(Math.random() * 1000);
@@ -107,12 +108,17 @@ const Board: React.FC = () => {
         } catch (error) {
             console.log("card updating failed:", error);
         }
-      };
+    };
+
+    const handleCardDeleted = () => {
+        setFetchTrigger(!fetchTrigger);
+    };
+
 
     return (
         <Grid2 container spacing={2} className="boardGrid">
             {cards.map((card) => (
-                <KanBanCard key={card.id} card={card} onUpdateCard={handleUpdateCard} />
+                <KanBanCard key={card.id} card={card} onUpdateCard={handleUpdateCard} onCardDeleted={handleCardDeleted} />
             ))}
             {token ? (
                 <Button variant="contained" className="addCardButton" onClick={handleAddCard}>

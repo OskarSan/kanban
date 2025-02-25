@@ -20,9 +20,11 @@ interface CardProps {
         status: string;
     }
     onUpdateCard: (updatedCard: CardProps['card']) => void;
+    onCardDeleted: () => void;
 }
 
-const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard}) => {
+
+const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted}) => {
 
     const [tasks, setTasks] = React.useState<kanBanCardContent[]>([]);
 
@@ -86,8 +88,30 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard}) => {
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
       setAnchorEl(event.currentTarget);
     };
+
+    const handleEditCard = () => {
+        
+        
+        setAnchorEl(null);  
+    }
+
+    const handleDeleteCard = async () => {
+        const res = await fetch('/api/deleteCard', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(card)
+        });
+
+        const data = await res.json();
+        console.log(data);
+
+        onCardDeleted();
+        setAnchorEl(null);
+    }
     const handleClose = () => {
-      setAnchorEl(null);
+        setAnchorEl(null);
     };
 
     return (
@@ -124,7 +148,7 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard}) => {
                             }}
                         >
                             <MenuItem onClick={handleClose}>Edit card</MenuItem>
-                            <MenuItem onClick={handleClose}>Delete card</MenuItem>
+                            <MenuItem onClick={handleDeleteCard}>Delete card</MenuItem>
                         </Menu>
                     </div>
                 </div>  
