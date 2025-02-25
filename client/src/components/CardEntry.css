@@ -1,12 +1,12 @@
 :root {
-    --todo-color: #ca2828;
-    --todo-border-color: #a02020; /* Darker red */
+    --todo-color: #a02020; 
+    --todo-border-color: #701010; 
 
-    --in-progress-color: #e0c840;
-    --in-progress-border-color: #b89c30; /* Darker yellow */
+    --in-progress-color: #b89c30; 
+    --in-progress-border-color: #8a6f20; 
 
-    --done-color: #4caf50;
-    --done-border-color: #388e3c; /* Darker green */
+    --done-color: #388e3c;
+    --done-border-color: #2a6b2c;
 }
 
 
@@ -29,11 +29,14 @@
 
 .card.in-progress {
     background-color: var(--in-progress-color);
+    text-shadow: black;
+    
 }
 
 .card.in-progress .taskHeader {
     border-bottom: 1px solid var(--in-progress-border-color);
 }
+
 
 .card.done {
     background-color: var(--done-color);
@@ -47,4 +50,21 @@
     display: flex;
     align-items: center;
     width: 100%;
+}
+
+#headerText {
+    margin-left: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.statusText {
+    margin-left: 0.5rem;
+    font-size: small;
+}
+
+.taskContent {
+    margin-left: 0.5rem;
+    padding-bottom: 1rem;
+    white-space: pre-wrap;
 }

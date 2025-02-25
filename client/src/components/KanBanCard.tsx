@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import { Card, CardContent, Typography, Grid2, Button, Menu, MenuItem, IconButton} from '@mui/material';
+import { Card, CardContent, Typography, Grid2, Button, Menu, MenuItem, IconButton, Dialog, DialogTitle, DialogContent, TextField, DialogActions } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CardEntry from './CardEntry';
 import './KanBanCard.css';
@@ -27,6 +27,9 @@ interface CardProps {
 const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted}) => {
 
     const [tasks, setTasks] = React.useState<Task[]>([]);
+    const [isEditing, setIsEditing] = React.useState(false);
+    const [editedTitle, setEditedTitle] = React.useState(card.title);
+
 
     useEffect(() => {
         setTasks(card.content);
@@ -103,7 +106,7 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted}) =>
     };
 
     const handleEditCard = () => {
-        
+        setIsEditing(true);
         
         setAnchorEl(null);  
     }
@@ -125,6 +128,37 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted}) =>
     }
     const handleClose = () => {
         setAnchorEl(null);
+    };
+
+    /*dialog config*/
+    const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setEditedTitle(e.target.value);
+    };
+
+    const handleEditSave = async () => {
+        const updatedCard = { ...card, title: editedTitle };
+        try {
+            const res = await fetch('/api/updateCard', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedCard)
+            });
+
+            if (res.ok) {
+                onUpdateCard(updatedCard);
+                setIsEditing(false);
+            };
+
+        } catch (error: any) {
+            console.log(error);
+        }
+    };
+
+    const handleEditCancel = () => {
+        setIsEditing(false);
+        setEditedTitle(card.title);
     };
 
     return (
@@ -160,7 +194,7 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted}) =>
                             horizontal: 'left',
                             }}
                         >
-                            <MenuItem onClick={handleClose}>Edit card</MenuItem>
+                            <MenuItem onClick={handleEditCard}>Edit card</MenuItem>
                             <MenuItem onClick={handleDeleteCard}>Delete card</MenuItem>
                         </Menu>
                     </div>
@@ -174,6 +208,32 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted}) =>
                     <Button variant="contained" className="addTaskButton" onClick={handleAddTask}>Add task</Button>
                 </div>
             </Card>
+
+             {/* Edit Card Dialog */}
+             <Dialog open={isEditing} onClose={handleEditCancel}>
+                <DialogTitle>Edit Card</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        margin="dense"
+                        label="Title"
+                        name="title"
+                        value={editedTitle}
+                        onChange={handleEditChange}
+                        fullWidth
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleEditCancel} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleEditSave} color="primary">
+                        Save
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+
+
         </Grid2>
     )
 }

@@ -1,3 +1,6 @@
+//dialog code from: https://mui.com/material-ui/react-dialog/
+
+
 import React from "react";
 import "./CardEntry.css";
 import IconButton from '@mui/material/IconButton';
@@ -99,7 +102,7 @@ const Card: React.FC<CardProps> = ({ task, onStatusChange, onTaskDeleted, onTask
         <div className={`card ${task.status}`}>
             <div className = "taskHeader">
                 
-                <Typography variant="h5" component="h2" style={{ flexGrow: 1 }}>
+                <Typography id="headerText" variant="h5" component="h2" style={{ flexGrow: 1}}>
                     {task.title}
                 </Typography>
                 
@@ -134,7 +137,8 @@ const Card: React.FC<CardProps> = ({ task, onStatusChange, onTaskDeleted, onTask
                 </div>
             </div>
             <div className="statusUpdateArea" onClick={onStatusChange}>
-                <p>{task.content}</p>
+                <p className="statusText">Status: {task.status}</p>
+                <p className="taskContent">{task.content}</p>
             </div>
 
             {/*Edit Task Dialog*/}
@@ -156,6 +160,7 @@ const Card: React.FC<CardProps> = ({ task, onStatusChange, onTaskDeleted, onTask
                         value={editedTask.content}
                         onChange={handleEditChange}
                         fullWidth
+                        multiline
                     />
                 </DialogContent>
                 <DialogActions>
