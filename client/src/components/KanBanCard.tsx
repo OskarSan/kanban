@@ -101,15 +101,15 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted}) =>
     };
 
     //drag and drop
-    const handleDragStart = (taskId: string) => {
+    const handleDragStartTask = (taskId: string) => {
         setDraggedTaskId(taskId);
     };
 
-    const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    const handleDragOverTask = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
     };
 
-    const handleDrop = (event: React.DragEvent<HTMLDivElement>, targetTaskId: string) => {
+    const handleDropTask = (event: React.DragEvent<HTMLDivElement>, targetTaskId: string) => {
         event.preventDefault();
         if (draggedTaskId === null) return;
 
@@ -239,9 +239,9 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted}) =>
                             onStatusChange={() => handleStatusChange(entry._id!)}
                             onTaskDeleted={handleTaskDeleted}
                             onTaskUpdated={handleTaskUpdated}
-                            onDragStart={handleDragStart}
-                            onDragOver={handleDragOver}
-                            onDrop={handleDrop}
+                            onDragStartTask={handleDragStartTask}
+                            onDragOverTask={handleDragOverTask}
+                            onDropTask={handleDropTask}
                             />
                        </React.Fragment>
                     ))}

@@ -24,14 +24,14 @@ interface CardProps {
     onStatusChange: () => void;
     onTaskDeleted: (taskId: string) => void;
     onTaskUpdated: (updatedTask: Task) => void;
-    onDragStart: (taskId: string) => void;
-    onDragOver: (event: React.DragEvent<HTMLDivElement>) => void;
-    onDrop: (event: React.DragEvent<HTMLDivElement>, taskId: string) => void;
+    onDragStartTask: (taskId: string) => void;
+    onDragOverTask: (event: React.DragEvent<HTMLDivElement>) => void;
+    onDropTask: (event: React.DragEvent<HTMLDivElement>, taskId: string) => void;
 }
 
 
 
-const Card: React.FC<CardProps> = ({ task, onStatusChange, onTaskDeleted, onTaskUpdated, onDragStart, onDragOver, onDrop}) => {
+const Card: React.FC<CardProps> = ({ task, onStatusChange, onTaskDeleted, onTaskUpdated, onDragStartTask: onDragStartTask, onDragOverTask: onDragOverTask, onDropTask: onDropTask}) => {
     
     //menu
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -105,9 +105,9 @@ const Card: React.FC<CardProps> = ({ task, onStatusChange, onTaskDeleted, onTask
         <div
             className={`card ${task.status}`}
             draggable="true"
-            onDragStart={() => onDragStart(task._id!)}
-            onDragOver={onDragOver}
-            onDrop={(event) => onDrop(event, task._id!)}
+            onDragStart={() => onDragStartTask(task._id!)}
+            onDragOver={onDragOverTask}
+            onDrop={(event) => onDropTask(event, task._id!)}
         >    
             <div className = "taskHeader">
                 
