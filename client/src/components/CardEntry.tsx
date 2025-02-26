@@ -10,6 +10,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Typography, TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 
 
+
 interface Task {
     _id?: string;
     title: string;
@@ -23,12 +24,14 @@ interface CardProps {
     onStatusChange: () => void;
     onTaskDeleted: (taskId: string) => void;
     onTaskUpdated: (updatedTask: Task) => void;
+    onDragStart: (taskId: string) => void;
+    onDragOver: (event: React.DragEvent<HTMLDivElement>) => void;
+    onDrop: (event: React.DragEvent<HTMLDivElement>, taskId: string) => void;
 }
 
 
 
-const Card: React.FC<CardProps> = ({ task, onStatusChange, onTaskDeleted, onTaskUpdated }) => {
-    
+const Card: React.FC<CardProps> = ({ task, onStatusChange, onTaskDeleted, onTaskUpdated, onDragStart, onDragOver, onDrop}) => {
     
     //menu
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -97,9 +100,15 @@ const Card: React.FC<CardProps> = ({ task, onStatusChange, onTaskDeleted, onTask
         setEditedTask({...task});
     };
 
-
+    
     return (
-        <div className={`card ${task.status}`}>
+        <div
+            className={`card ${task.status}`}
+            draggable="true"
+            onDragStart={() => onDragStart(task._id!)}
+            onDragOver={onDragOver}
+            onDrop={(event) => onDrop(event, task._id!)}
+        >    
             <div className = "taskHeader">
                 
                 <Typography id="headerText" variant="h5" component="h2" style={{ flexGrow: 1}}>

@@ -2,8 +2,8 @@ import React, {useEffect} from "react";
 import { Card, CardContent, Typography, Grid2, Button, Menu, MenuItem, IconButton, Dialog, DialogTitle, DialogContent, TextField, DialogActions } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CardEntry from './CardEntry';
-import './KanBanCard.css';
 
+import './KanBanCard.css';
 
 interface Task {
     _id?: string;
@@ -29,6 +29,8 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted}) =>
     const [tasks, setTasks] = React.useState<Task[]>([]);
     const [isEditing, setIsEditing] = React.useState(false);
     const [editedTitle, setEditedTitle] = React.useState(card.title);
+    const [draggedTaskId, setDraggedTaskId] = React.useState<string | null>(null);
+
 
 
     useEffect(() => {
@@ -97,10 +99,39 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted}) =>
         setTasks(updatedTasks);
         onUpdateCard({ ...card, content: updatedTasks });
     };
+
+    //drag and drop
+    const handleDragStart = (taskId: string) => {
+        setDraggedTaskId(taskId);
+    };
+
+    const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+    };
+
+    const handleDrop = (event: React.DragEvent<HTMLDivElement>, targetTaskId: string) => {
+        event.preventDefault();
+        if (draggedTaskId === null) return;
+
+        const draggedTaskIndex = tasks.findIndex(task => task._id === draggedTaskId);
+        const targetTaskIndex = tasks.findIndex(task => task._id === targetTaskId);
+
+        if (draggedTaskIndex === -1 || targetTaskIndex === -1) return;
+
+        const updatedTasks = [...tasks];
+        const [draggedTask] = updatedTasks.splice(draggedTaskIndex, 1);
+        updatedTasks.splice(targetTaskIndex, 0, draggedTask);
+
+        setTasks(updatedTasks);
+        onUpdateCard({ ...card, content: updatedTasks });
+        setDraggedTaskId(null);
+    };
+
     //menu
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
+    
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
       setAnchorEl(event.currentTarget);
     };
@@ -199,10 +230,22 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted}) =>
                         </Menu>
                     </div>
                 </div>  
-                <CardContent className="cardContent">
-                    {card.content.map((entry, index) => (
-                        <CardEntry key={index} task={entry} onStatusChange={() => handleStatusChange(entry._id!)} onTaskDeleted={handleTaskDeleted} onTaskUpdated={handleTaskUpdated} />
+                <CardContent className="cardContent" /*onDragOver={enableDropping} onDrop={handleDrop}*/>
+                    {card.content.map((entry) => (
+                       <React.Fragment key={entry._id}>
+                            <CardEntry
+                            key={entry._id}
+                            task={entry}
+                            onStatusChange={() => handleStatusChange(entry._id!)}
+                            onTaskDeleted={handleTaskDeleted}
+                            onTaskUpdated={handleTaskUpdated}
+                            onDragStart={handleDragStart}
+                            onDragOver={handleDragOver}
+                            onDrop={handleDrop}
+                            />
+                       </React.Fragment>
                     ))}
+                    
                 </CardContent>
                 <div className="buttonContainer">
                     <Button variant="contained" className="addTaskButton" onClick={handleAddTask}>Add task</Button>

@@ -5,6 +5,7 @@ import Header from './components/Header'
 import Board from './components/Board'
 import Register from './components/Register'
 import LoginPage from './components/LoginPage'
+
 /*
 const cardEntries = [
   { title: "tasku", content: "tasku content", status: "todo" },
@@ -26,14 +27,15 @@ const cards = [
 function App() {
 
   return (
-    <Router>
+    <Router>  
       <Header/>
       <Routes>
         <Route path="/" element={<Board />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<LoginPage />} />
-      </Routes>
-    </Router>
+      </Routes>  
+    </Router>  
+    
   );
 }
 
