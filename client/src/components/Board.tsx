@@ -22,6 +22,7 @@ const Board: React.FC = () => {
     
     const [cards, setCards] = React.useState<IKanBanCard[]>([]);
     const [fetchTrigger, setFetchTrigger] = useState(false);
+    const [draggedCardId, setDraggedCardId] = useState<number | null>(null);
     const token = localStorage.getItem('auth_token');
     const navigate = useNavigate();
 
@@ -110,15 +111,51 @@ const Board: React.FC = () => {
         }
     };
 
+    
+
     const handleCardDeleted = () => {
         setFetchTrigger(!fetchTrigger);
     };
+
+    const handleDragStartCard = (cardId: number) => {
+        setDraggedCardId(cardId);
+    };
+    
+    const handleDragOverCard = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+    }
+
+    const handleDropCard = (e: React.DragEvent<HTMLDivElement>, targetCardId) => {
+        e.preventDefault();
+        if(draggedCardId ===null) return;
+        console.log(cards)
+        const draggedCardIndex = cards.findIndex((card) => card.id === draggedCardId);
+        const targetCardIndex = cards.findIndex((card) => card.id === targetCardId);
+        console.log(targetCardId)
+        if (draggedCardIndex === -1 || targetCardIndex === -1) return;
+
+        const updatedCards = [...cards];
+        const [draggedCard] = updatedCards.splice(draggedCardIndex, 1);
+        updatedCards.splice(targetCardIndex, 0, draggedCard);
+        console.log(updatedCards)
+        setCards(updatedCards); 
+        setDraggedCardId(null);
+
+    }
 
 
     return (
         <Grid2 container spacing={2} className="boardGrid">
             {cards.map((card) => (
-                <KanBanCard key={card.id} card={card} onUpdateCard={handleUpdateCard} onCardDeleted={handleCardDeleted} />
+                <KanBanCard 
+                key={card.id} 
+                card={card} 
+                onUpdateCard={handleUpdateCard} 
+                onCardDeleted={handleCardDeleted} 
+                onDragStartCard={handleDragStartCard}
+                onDragOverCard={handleDragOverCard}
+                onDropCard={handleDropCard}
+                />
             ))}
             {token ? (
                 <Button variant="contained" className="addCardButton" onClick={handleAddCard}>

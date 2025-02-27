@@ -105,9 +105,9 @@ const Card: React.FC<CardProps> = ({ task, onStatusChange, onTaskDeleted, onTask
         <div
             className={`card ${task.status}`}
             draggable="true"
-            onDragStart={() => onDragStartTask(task._id!)}
-            onDragOver={onDragOverTask}
-            onDrop={(event) => onDropTask(event, task._id!)}
+            onDragStart={(event) => { event.stopPropagation(); onDragStartTask(task._id!); }}
+            onDragOver={(event) => { event.stopPropagation(); onDragOverTask(event); }}
+            onDrop={(event) => { event.stopPropagation(); onDropTask(event, task._id!); }}
         >    
             <div className = "taskHeader">
                 

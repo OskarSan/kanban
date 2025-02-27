@@ -21,10 +21,14 @@ interface CardProps {
     }
     onUpdateCard: (updatedCard: CardProps['card']) => void;
     onCardDeleted: () => void;
+    onDragStartCard: (cardId: number) => void;
+    onDragOverCard: (event: React.DragEvent<HTMLDivElement>) => void;
+    onDropCard: (event: React.DragEvent<HTMLDivElement>, targetCardId: number) => void;
+    
 }
 
 
-const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted}) => {
+const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted, onDragStartCard, onDragOverCard, onDropCard}) => {
 
     const [tasks, setTasks] = React.useState<Task[]>([]);
     const [isEditing, setIsEditing] = React.useState(false);
@@ -194,7 +198,13 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted}) =>
 
     return (
         <Grid2 key={card.id} className="cardGrid">
-            <Card className="kanBanCard">
+            <Card 
+                className="kanBanCard"
+                draggable="true"
+                onDragStart={() => onDragStartCard(card.id)}
+                onDragOver={onDragOverCard}
+                onDrop={(event) => onDropCard(event, card.id)}
+            >
                 <div className="cardHeader">
                         <Typography variant="h5" component="h2" style={{ flexGrow: 1 }}>
                             {card.title}
