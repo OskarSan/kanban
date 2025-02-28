@@ -30,10 +30,13 @@ userRouter.post("/register",
             }
             const salt: string = await bcrypt.genSaltSync(10)
             const hashedPassword: string = await bcrypt.hash(req.body.password, salt)
-
+            
+            //const newBoard = await Board.create({Id: user._id });
+            
             await User.create({
                 username: req.body.username,
                 password: hashedPassword,
+                //board: newBoard,
                 cardIds: []
             })
             res.status(201).json({message: "User created"})
@@ -66,18 +69,13 @@ userRouter.post("/login",
                 //cardIds maybe not needed here
                 const JwtPayload: JwtPayload = {
                     id: user._id,
-                    username: user.username,
-                    cardIds: user.cardIds
+                    username: user.username
                 }
                 const token: string = jwt.sign(JwtPayload, process.env.JWT_SECRET as string, {expiresIn: "5m"})
 
                 res.status(200).json({message: "Login successful", success: true, token: token})
                 return
             }
-
-
-
-
 
         }catch(error: any){
             res.status(500).json({message: error.message})

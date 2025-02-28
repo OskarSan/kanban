@@ -12,8 +12,35 @@ interface CustomRequest extends Request {
     };
 }
 
-
 const router: Router = Router();
+
+router.post('/api/updateUser',validateToken, async (req: CustomRequest, res: Response) => {
+    try {
+        
+        console.log(req.body);
+        console.log(req.user);       
+        const newOrder = req.body.newOrder;
+        const userId = req.user?.id;
+        if (!userId) {
+            res.status(401).json({ message: 'User not authenticated' });
+            return;
+        }
+
+        const user = await User.findById(userId);
+
+        if (!user) {
+            res.status(404).json({ message: 'User not found' });
+            return;
+        }
+        console.log(user.cardIds);
+        user.cardIds = newOrder;
+        user.save();
+        console.log(user.cardIds);
+        res.status(200).json({message: 'Cards updated successfully'});
+    } catch (error: any) {
+        res.status(500).json({message: error.message});
+    }   
+});
 
 router.post('/api/addNewCard', validateToken, async (req: CustomRequest, res: Response) => {
     try {
@@ -111,8 +138,10 @@ router.post('/api/deleteCard', async (req: Request, res: Response) => {
 });
 
 
-router.get('/api/getCards', validateToken, async (req: Request, res: Response): Promise<void> => {
+router.get('/api/getCards', validateToken, async (req: CustomRequest, res: Response): Promise<void> => {
     try {
+
+
         const cards = await KanBanCard.find().populate('content');
         res.status(200).json(cards);
     }catch(error: any) {
@@ -120,6 +149,10 @@ router.get('/api/getCards', validateToken, async (req: Request, res: Response): 
     }
 });
 
+
+//stupid ahh function which sorts the users cards based on the order of the cardIds array
+//could be done in a better way for example by making a board component which is used
+//inbetween user and the users cards.
 router.get('/api/getUsersCards', validateToken, async (req: CustomRequest, res: Response): Promise<void> => {
     try {
         const userId = req.user?.id;
@@ -133,7 +166,14 @@ router.get('/api/getUsersCards', validateToken, async (req: CustomRequest, res: 
             return;
         }
         const cards = await KanBanCard.find({ _id: { $in: user.cardIds } }).populate('content');
-        res.status(200).json(cards);
+        
+        const sortedCards = cards.sort((a, b) => {
+            return user.cardIds.indexOf(a._id as mongoose.Types.ObjectId) - user.cardIds.indexOf(b._id as mongoose.Types.ObjectId);
+        });
+
+        console.log(sortedCards);
+        res.status(200).json(sortedCards);
+    
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }

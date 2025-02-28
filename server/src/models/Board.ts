@@ -1,4 +1,3 @@
-"use strict";
 /*
 import mongoose, { Schema, Document } from 'mongoose';
 import {KanBanCard, IKanBanCard} from './KanbanCard';
@@ -17,4 +16,4 @@ const boardSchema: Schema = new Schema({
 const Board = mongoose.model<IBoard>('board', boardSchema);
 
 export {Board, IBoard};
-*/ 
+*/

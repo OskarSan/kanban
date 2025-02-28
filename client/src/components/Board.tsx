@@ -11,6 +11,7 @@ interface kanBanCardContent {
 }
 
 interface IKanBanCard {
+    _id?: any;
     id: number;
     title: string;
     content: kanBanCardContent[];
@@ -45,6 +46,7 @@ const Board: React.FC = () => {
                     navigate('/login');
                 } else {
                     const data = await response.json();
+                    console.log(data)
                     setCards(data);
                 }
             } catch (error) {
@@ -111,7 +113,27 @@ const Board: React.FC = () => {
         }
     };
 
-    
+    const handleUpdateCardsOrder = async (updatedCards: IKanBanCard[]) => {
+        try{
+            const newOrder = updatedCards.map(card => card._id);
+            console.log(newOrder)
+            const res = await fetch('/api/updateUser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({newOrder})
+            });
+            if (res.ok) {
+                console.log("cards order updated", res);
+            } else {
+                console.log("cards order updating failed", res);
+            }
+        }catch (error : any) {
+            console.log("cards order updating failed:", error);
+        }
+    };
 
     const handleCardDeleted = () => {
         setFetchTrigger(!fetchTrigger);
@@ -125,7 +147,7 @@ const Board: React.FC = () => {
         e.preventDefault();
     }
 
-    const handleDropCard = (e: React.DragEvent<HTMLDivElement>, targetCardId) => {
+    const handleDropCard = (e: React.DragEvent<HTMLDivElement>, targetCardId: number) => {
         e.preventDefault();
         if(draggedCardId ===null) return;
         console.log(cards)
@@ -139,6 +161,7 @@ const Board: React.FC = () => {
         updatedCards.splice(targetCardIndex, 0, draggedCard);
         console.log(updatedCards)
         setCards(updatedCards); 
+        handleUpdateCardsOrder(updatedCards);
         setDraggedCardId(null);
 
     }

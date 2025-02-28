@@ -38,6 +38,7 @@ const mongoose_1 = __importStar(require("mongoose"));
 const UserSchema = new mongoose_1.Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    board: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Board' },
     cardIds: { type: [mongoose_1.Schema.Types.ObjectId], ref: 'KanBanCard' }
 });
 const User = mongoose_1.default.model('User', UserSchema);
