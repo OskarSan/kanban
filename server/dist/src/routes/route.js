@@ -118,6 +118,7 @@ router.get('/api/getCards', validateToken_1.validateToken, async (req, res) => {
 //inbetween user and the users cards.
 router.get('/api/getUsersCards', validateToken_1.validateToken, async (req, res) => {
     try {
+        console.log(req.user);
         const userId = req.user?.id;
         if (!userId) {
             res.status(401).json({ message: 'User not authenticated' });

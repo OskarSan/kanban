@@ -9,6 +9,8 @@ import { parse } from 'path';
 import dotenv from 'dotenv';
 import cors, {CorsOptions} from 'cors';
 
+import passport from "./src/middleware/google-passport-config";
+
 dotenv.config();
 
 
@@ -27,7 +29,8 @@ const corsOptions: CorsOptions = {
     optionsSuccessStatus: 200
 }
 
-app.use(cors(corsOptions));
+app.use(passport.initialize());
+app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 app.use("/",router);

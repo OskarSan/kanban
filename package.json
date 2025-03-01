@@ -31,10 +31,16 @@
     "@mui/styled-engine": "^6.4.3",
     "@types/react": "^19.0.8",
     "concurrently": "^9.1.2",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
     "react": "^19.0.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^19.0.0",
     "react-toastify": "^11.0.3"
+  },
+  "devDependencies": {
+    "@types/passport": "^1.0.17",
+    "@types/passport-google-oauth20": "^2.0.16"
   }
 }

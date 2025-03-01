@@ -8,7 +8,8 @@ import mongoose from 'mongoose';
 
 interface CustomRequest extends Request {
     user?: {
-        id: string;
+        id?: string;
+        _id?: string;
     };
 }
 
@@ -140,8 +141,6 @@ router.post('/api/deleteCard', async (req: Request, res: Response) => {
 
 router.get('/api/getCards', validateToken, async (req: CustomRequest, res: Response): Promise<void> => {
     try {
-
-
         const cards = await KanBanCard.find().populate('content');
         res.status(200).json(cards);
     }catch(error: any) {
@@ -155,6 +154,7 @@ router.get('/api/getCards', validateToken, async (req: CustomRequest, res: Respo
 //inbetween user and the users cards.
 router.get('/api/getUsersCards', validateToken, async (req: CustomRequest, res: Response): Promise<void> => {
     try {
+        console.log(req.user);
         const userId = req.user?.id;
         if (!userId) {
             res.status(401).json({ message: 'User not authenticated' });

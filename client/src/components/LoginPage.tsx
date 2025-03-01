@@ -3,7 +3,7 @@
 
 
 
-import React, {useState} from 'react'
+import React, {useEffect,useState} from 'react'
 import { useNavigate } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
@@ -77,7 +77,14 @@ const LoginPage = () => {
 
 
     const navigate = useNavigate();
-
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        if (token) {
+          localStorage.setItem('auth_token', token);
+          navigate('/');
+        }
+      }, [navigate]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
@@ -140,7 +147,12 @@ const LoginPage = () => {
       };
     
 
-
+    
+    
+  
+    const handleGoogleSignIn = async (response: any) => {
+        window.location.href = 'http://localhost:3000/user/auth/google';
+    };
 
     return (
         <>
@@ -210,6 +222,11 @@ const LoginPage = () => {
                     >
                     Sign in
                     </Button>
+
+                    {/* Google Sign in */}
+                    <button onClick={handleGoogleSignIn}>Login with Google</button>
+
+
                     <Typography sx={{ textAlign: 'center' }}>
                     Don&apos;t have an account?{' '}
                     <Link
