@@ -10,6 +10,7 @@ interface CustomRequest extends Request {
     user?: {
         id?: string;
         _id?: string;
+        username?: string;
     };
 }
 
@@ -50,8 +51,9 @@ router.post('/api/addNewCard', validateToken, async (req: CustomRequest, res: Re
             res.status(401).json({ message: 'User not authenticated' });
             return 
         }
+        console.log(req.user);
         const kanBanCard = new KanBanCard(req.body);
-        
+        kanBanCard.createdBy = req.user?.username;
         
         console.log(kanBanCard);
         await kanBanCard.save();
@@ -155,6 +157,7 @@ router.get('/api/getCards', validateToken, async (req: CustomRequest, res: Respo
 router.get('/api/getUsersCards', validateToken, async (req: CustomRequest, res: Response): Promise<void> => {
     try {
         console.log(req.user);
+        
         const userId = req.user?.id;
         if (!userId) {
             res.status(401).json({ message: 'User not authenticated' });
@@ -163,6 +166,11 @@ router.get('/api/getUsersCards', validateToken, async (req: CustomRequest, res: 
         const user = await User.findById(userId)
         if (!user) {
             res.status(404).json({ message: 'User not found' });
+            return;
+        }
+        if(user.isAdmin == true){
+            const cards = await KanBanCard.find().populate('content');
+            res.status(200).json(cards);
             return;
         }
         const cards = await KanBanCard.find({ _id: { $in: user.cardIds } }).populate('content');

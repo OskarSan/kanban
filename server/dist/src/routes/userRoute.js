@@ -32,7 +32,8 @@ userRouter.post("/register", (0, express_validator_1.body)('username').isString(
             username: req.body.username,
             password: hashedPassword,
             //board: newBoard,
-            cardIds: []
+            cardIds: [],
+            isAdmin: req.body.isAdmin,
         });
         res.status(201).json({ message: "User created" });
     }
@@ -42,6 +43,7 @@ userRouter.post("/register", (0, express_validator_1.body)('username').isString(
     }
 });
 userRouter.post("/login", (0, express_validator_1.body)('username').isString().trim().escape(), (0, express_validator_1.body)('password').isString().escape(), async (req, res) => {
+    let isAdmin = false;
     try {
         //change user not found and invalid password to "login failed" for security reasons
         const user = await User_1.User.findOne({ username: req.body.username });
@@ -59,13 +61,16 @@ userRouter.post("/login", (0, express_validator_1.body)('username').isString().t
             return;
         }
         else {
+            if (user.isAdmin) {
+                isAdmin = true;
+            }
             //cardIds maybe not needed here
             const JwtPayload = {
                 id: user._id,
                 username: user.username
             };
             const token = jsonwebtoken_1.default.sign(JwtPayload, process.env.JWT_SECRET, { expiresIn: "5m" });
-            res.status(200).json({ message: "Login successful", success: true, token: token });
+            res.status(200).json({ message: "Login successful", success: true, token: token, isAdmin: isAdmin });
             return;
         }
     }

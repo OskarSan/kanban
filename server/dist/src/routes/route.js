@@ -38,7 +38,9 @@ router.post('/api/addNewCard', validateToken_1.validateToken, async (req, res) =
             res.status(401).json({ message: 'User not authenticated' });
             return;
         }
+        console.log(req.user);
         const kanBanCard = new KanBanCard_1.KanBanCard(req.body);
+        kanBanCard.createdBy = req.user?.username;
         console.log(kanBanCard);
         await kanBanCard.save();
         const user = await User_1.User.findById(userId);
@@ -127,6 +129,11 @@ router.get('/api/getUsersCards', validateToken_1.validateToken, async (req, res)
         const user = await User_1.User.findById(userId);
         if (!user) {
             res.status(404).json({ message: 'User not found' });
+            return;
+        }
+        if (user.isAdmin == true) {
+            const cards = await KanBanCard_1.KanBanCard.find().populate('content');
+            res.status(200).json(cards);
             return;
         }
         const cards = await KanBanCard_1.KanBanCard.find({ _id: { $in: user.cardIds } }).populate('content');

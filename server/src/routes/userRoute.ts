@@ -39,7 +39,8 @@ userRouter.post("/register",
                 username: req.body.username,
                 password: hashedPassword,
                 //board: newBoard,
-                cardIds: []
+                cardIds: [],
+                isAdmin: req.body.isAdmin,
             })
             res.status(201).json({message: "User created"})
 
@@ -54,6 +55,7 @@ userRouter.post("/login",
     body('username').isString().trim().escape(),
     body('password').isString().escape(),
     async(req: Request, res: Response) => {
+        let isAdmin: boolean = false
         try {
 
             //change user not found and invalid password to "login failed" for security reasons
@@ -71,7 +73,10 @@ userRouter.post("/login",
                 res.status(400).json({message: "Invalid password"})
                 return
             }else{
-
+                
+                if(user.isAdmin){
+                    isAdmin = true
+                }
                 //cardIds maybe not needed here
                 const JwtPayload: JwtPayload = {
                     id: user._id,
@@ -79,7 +84,7 @@ userRouter.post("/login",
                 }
                 const token: string = jwt.sign(JwtPayload, process.env.JWT_SECRET as string, {expiresIn: "5m"})
 
-                res.status(200).json({message: "Login successful", success: true, token: token})
+                res.status(200).json({message: "Login successful", success: true, token: token, isAdmin: isAdmin})
                 return
             }
 
@@ -113,7 +118,7 @@ userRouter.get('/auth/google/callback',
                 jwtPayload.username = newUser.username
                 jwtPayload.id = newUser._id
                 jwtPayload.googleId = newUser.googleId
-            } else {
+            } else { 
                 jwtPayload.username = user.username
                 jwtPayload.id = user._id
                 jwtPayload.googleId = user.googleId

@@ -18,6 +18,7 @@ interface CardProps {
         title: string;
         content: Task[];
         status: string;
+        createdBy?: string;
     }
     onUpdateCard: (updatedCard: CardProps['card']) => void;
     onCardDeleted: () => void;
@@ -205,10 +206,17 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted, onD
                 onDragOver={onDragOverCard}
                 onDrop={(event) => onDropCard(event, card.id)}
             >
+                {localStorage.getItem('isAdmin') === 'true' && (
+                    <Typography variant="h6" component="h1" sx={{ flexGrow: 1, fontSize: '0.875rem' }}>
+                        Created By: {card.createdBy}
+                    </Typography>
+                )}
+                
                 <div className="cardHeader">
                         <Typography variant="h5" component="h2" style={{ flexGrow: 1 }}>
                             {card.title}
                         </Typography>
+                        
                         {/*edit card button*/}
                     <div>
                         <IconButton style={{paddingRight: 30 }}
@@ -240,7 +248,10 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted, onD
                         </Menu>
                     </div>
                 </div>  
+                
                 <CardContent className="cardContent" /*onDragOver={enableDropping} onDrop={handleDrop}*/>
+                   
+                   
                     {card.content.map((entry) => (
                        <React.Fragment key={entry._id}>
                             <CardEntry

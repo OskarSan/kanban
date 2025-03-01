@@ -110,6 +110,7 @@ const LoginPage = () => {
                 const data = await res.json();
                 if(data.token){
                     localStorage.setItem('auth_token', data.token);
+                    localStorage.setItem('isAdmin', data.isAdmin);
                     navigate('/');
                 }
             }

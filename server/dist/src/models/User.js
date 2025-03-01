@@ -40,7 +40,8 @@ const UserSchema = new mongoose_1.Schema({
     password: { type: String, required: false },
     board: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Board' },
     cardIds: { type: [mongoose_1.Schema.Types.ObjectId], ref: 'KanBanCard' },
-    googleId: { type: String, required: false }
+    googleId: { type: String, required: false },
+    isAdmin: { type: Boolean, required: false, default: false }
 });
 const User = mongoose_1.default.model('User', UserSchema);
 exports.User = User;
