@@ -1,9 +1,11 @@
+
 .appBar {
     background-color: #1a1a1a;
 }
 
 .toolBar {
     background-color: #1a1a1a;
+    height: 80px;
 }
 
 .loginButton{
@@ -23,6 +25,7 @@
 .buttonSpacing {
     margin-right: 106px;
 }
+
 
 .button:hover {
     transition: color 0.3s ease;
