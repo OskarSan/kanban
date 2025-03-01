@@ -16,6 +16,7 @@ interface Task {
     title: string;
     content: string;
     status: string;
+    timeStamp: string;
 }
 
 
@@ -85,7 +86,8 @@ const Card: React.FC<CardProps> = ({ task, onStatusChange, onTaskDeleted, onTask
             });
     
             if (res.ok) {
-                onTaskUpdated(editedTask);
+                const updatedTask = await res.json();
+                onTaskUpdated(updatedTask.task);
                 setIsEditing(false);
             };
     
@@ -100,7 +102,8 @@ const Card: React.FC<CardProps> = ({ task, onStatusChange, onTaskDeleted, onTask
         setEditedTask({...task});
     };
 
-    
+    const formattedTimeStamp = new Date(task.timeStamp).toLocaleString();
+
     return (
         <div
             className={`card ${task.status}`}
@@ -110,7 +113,7 @@ const Card: React.FC<CardProps> = ({ task, onStatusChange, onTaskDeleted, onTask
             onDrop={(event) => { event.stopPropagation(); onDropTask(event, task._id!); }}
         >    
             <div className = "taskHeader">
-                
+
                 <Typography id="headerText" variant="h5" component="h2" style={{ flexGrow: 1}}>
                     {task.title}
                 </Typography>
@@ -144,10 +147,13 @@ const Card: React.FC<CardProps> = ({ task, onStatusChange, onTaskDeleted, onTask
                         <MenuItem onClick={handleDeleteTask}>Delete Task</MenuItem>
                     </Menu>
                 </div>
+                
             </div>
             <div className="statusUpdateArea" onClick={onStatusChange}>
                 <p className="statusText">Status: {task.status}</p>
+                <p className="dateText">last edit: {formattedTimeStamp}</p>
                 <p className="taskContent">{task.content}</p>
+                
             </div>
 
             {/*Edit Task Dialog*/}

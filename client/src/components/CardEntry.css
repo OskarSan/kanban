@@ -59,13 +59,26 @@
     font-weight: bold;
 }
 
+.headerTop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
 .statusText {
     margin-left: 0.5rem;
     font-size: small;
+}
+.dateText {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    font-size: x-small;
 }
 
 .taskContent {
     margin-left: 0.5rem;
     padding-bottom: 1rem;
     white-space: pre-wrap;
+
 }

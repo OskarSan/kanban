@@ -151,7 +151,7 @@ const LoginPage = () => {
     
     
   
-    const handleGoogleSignIn = async (response: any) => {
+    const handleGoogleSignIn = async () => {
         window.location.href = 'http://localhost:3000/user/auth/google';
     };
 

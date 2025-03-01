@@ -8,6 +8,7 @@ interface kanBanCardContent {
     title: string;
     content: string;
     status: string;
+    timeStamp: string;
 }
 
 interface IKanBanCard {

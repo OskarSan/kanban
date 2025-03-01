@@ -10,6 +10,7 @@ interface Task {
     title: string;
     content: string;
     status: string;
+    timeStamp: string;
 }
 
 interface CardProps {
