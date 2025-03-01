@@ -45,7 +45,7 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted, onD
 
     
     const handleAddTask = async () => {
-        const newTask = {title: "New Task", content: "New Content", status: "todo"};
+        const newTask = {title: "New Task", content: "New Content", status: "todo", timeStamp: new Date()};
 
         try{
             const response = await fetch('/api/addNewTask', {

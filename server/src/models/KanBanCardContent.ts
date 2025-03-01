@@ -13,7 +13,7 @@ const kanBanCardContentSchema: Schema = new Schema({
     title: {type: String, required: true},
     content: {type: String, required: true},
     status: {type: String, required: true},
-    timeStamp: {type: Date, required: true, default: Date.now}
+    timeStamp: {type: Date, required: true}
 }, {collection: 'kanBanCardContent'});
 
 const KanBanCardContent = mongoose.model<IKanBanCardContent>('kanBanCardContent', kanBanCardContentSchema);

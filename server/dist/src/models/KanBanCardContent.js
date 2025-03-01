@@ -39,7 +39,7 @@ const kanBanCardContentSchema = new mongoose_1.Schema({
     title: { type: String, required: true },
     content: { type: String, required: true },
     status: { type: String, required: true },
-    timeStamp: { type: Date, required: true, default: Date.now }
+    timeStamp: { type: Date, required: true }
 }, { collection: 'kanBanCardContent' });
 const KanBanCardContent = mongoose_1.default.model('kanBanCardContent', kanBanCardContentSchema);
 exports.KanBanCardContent = KanBanCardContent;
