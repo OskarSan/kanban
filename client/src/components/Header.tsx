@@ -30,13 +30,17 @@ const LogoutButton = styled(Button)({
     },
 });
 
+interface HeaderProps {
+    onSearch: (query: string) => void;
+}
 
-
-const Header: React.FC = () => {
+const Header: React.FC<HeaderProps> = ({ onSearch }) => {
 
 
     const navigate = useNavigate(); 
     const token = localStorage.getItem('auth_token');
+    const [searchQuery, setSearchQuery] = useState('');
+
 
 
     //handling for the buttons in the header
@@ -54,6 +58,10 @@ const Header: React.FC = () => {
     };
 
 
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(e.target.value);
+        onSearch(e.target.value);
+    };
 
 
     return (
@@ -72,7 +80,9 @@ const Header: React.FC = () => {
                             id="outlined-basic" 
                             label="Search" 
                             variant="outlined" 
-                            placeholder='Search' 
+                            placeholder='Search'
+                            value={searchQuery}
+                            onChange={handleSearchChange}
                             sx={{
                                 marginRight: '10px',
                                 '& .MuiInputBase-input': {

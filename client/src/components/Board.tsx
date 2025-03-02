@@ -3,6 +3,7 @@ import { Grid2, Button, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import './Board.css';
 import KanBanCard from './KanBanCard';
+import Header from './Header';
 
 interface kanBanCardContent {
     title: string;
@@ -23,6 +24,7 @@ interface IKanBanCard {
 const Board: React.FC = () => {
     
     const [cards, setCards] = React.useState<IKanBanCard[]>([]);
+    const [filteredCards, setFilteredCards] = useState<IKanBanCard[]>([]);
     const [fetchTrigger, setFetchTrigger] = useState(false);
     const [draggedCardId, setDraggedCardId] = useState<number | null>(null);
     const token = localStorage.getItem('auth_token');
@@ -49,6 +51,7 @@ const Board: React.FC = () => {
                     const data = await response.json();
                     console.log(data)
                     setCards(data);
+                    setFilteredCards(data);
                 }
             } catch (error) {
                 console.log(error);
@@ -90,6 +93,9 @@ const Board: React.FC = () => {
     const handleUpdateCard = async (updatedCard: IKanBanCard) => {
         console.log("updated card", updatedCard);
         setCards((prevCards) =>
+            prevCards.map((card) => (card.id === updatedCard.id ? updatedCard : card))
+        );
+        setFilteredCards((prevCards) =>
             prevCards.map((card) => (card.id === updatedCard.id ? updatedCard : card))
         );
         console.log(cards)
@@ -175,30 +181,45 @@ const Board: React.FC = () => {
 
     }
 
+    const handleSearch = (query: string) => {
+        if (query.trim() === '') {
+            setFilteredCards(cards);
+        } else {
+            const filtered = cards.filter(card =>
+                card.title.toLowerCase().includes(query.toLowerCase())
+            );
+            setFilteredCards(filtered);
+        }
+    };
+
 
     return (
-        <Grid2 container spacing={2} className="boardGrid">
-            {cards.map((card) => (
-                <KanBanCard 
-                key={card.id} 
-                card={card} 
-                onUpdateCard={handleUpdateCard} 
-                onCardDeleted={handleCardDeleted} 
-                onDragStartCard={handleDragStartCard}
-                onDragOverCard={handleDragOverCard}
-                onDropCard={handleDropCard}
-                />
-            ))}
-            {token ? (
-                <Button variant="contained" className="addCardButton" onClick={handleAddCard}>
-                    Add card
-                </Button>
-            ) : (
-                <Typography variant="h5" component="h2">
-                    Please login to view your cards
-                </Typography>
-            )}
-        </Grid2>
+        <>
+            <Header onSearch={handleSearch} />
+            <Grid2 container spacing={2} className="boardGrid">
+                {filteredCards.map((card) => (
+                    <KanBanCard 
+                    key={card.id} 
+                    card={card} 
+                    onUpdateCard={handleUpdateCard} 
+                    onCardDeleted={handleCardDeleted} 
+                    onDragStartCard={handleDragStartCard}
+                    onDragOverCard={handleDragOverCard}
+                    onDropCard={handleDropCard}
+                    />
+                ))}
+                {token ? (
+                    <Button variant="contained" className="addCardButton" onClick={handleAddCard}>
+                        Add card
+                    </Button>
+                ) : (
+                    <Typography variant="h5" component="h2">
+                        Please login to view your cards
+                    </Typography>
+                )}
+            </Grid2>
+        </>
+        
     )
 }
 export default Board
