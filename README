@@ -1,3 +1,13 @@
+Github Link:
+https://github.com/OskarSan/kanban
+
+
+Link for the project documentation docs:
+https://docs.google.com/document/d/1UA36PO3Fs6jezjKjuvH8E47mvYMIMO9JvEwt5WzLt3Y/edit?usp=sharing
+
+
+
+
 # Kanban Project
 
 This project is a Kanban board application built with React, TypeScript, and Vite for the client, and Express, TypeScript, and MongoDB for the server.
