@@ -31,27 +31,27 @@ cd kanban
 2. **Install dependencies**
 
 ### Install client dependencies
-cd client
-npm install
+	cd client
+	npm install
 
 ### Install server dependencies
-cd ../server
-npm install
+	cd ../server
+	npm install
 
 3. **Set Up Environment Variables**
 
 Create  .env file in the client directory with the following content:
 
-VITE_API_URL = http://localhost:3000
+	VITE_API_URL = http://localhost:3000
 
 Create .env file in the server directory with the following content: 
 	
-PORT=3000
-MONGODB_URI = your_mongodb_connection_string
-JWT_SECRET = your_jwt_secret
-GOOGLE_CLIENT_ID = your_google_client_id
-GOOGLE_CLIENT_SECRET = your_google_client_secret
-GOOGLE_CALLBACK_URL = http://localhost:3000/user/auth/google/callback
+	PORT=3000
+	MONGODB_URI = your_mongodb_connection_string
+	JWT_SECRET = your_jwt_secret
+	GOOGLE_CLIENT_ID = your_google_client_id
+	GOOGLE_CLIENT_SECRET = your_google_client_secret
+	GOOGLE_CALLBACK_URL = http://localhost:3000/user/auth/google/callback
 
 
 4. **Run the project**
