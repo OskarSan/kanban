@@ -27,11 +27,13 @@ Follow these instructions to get a copy of the project up and running on your lo
 
 ### 2. **Install dependencies**
 
-### Install client dependencies
+Install client dependencies
+
 	cd client
 	npm install
 
-### Install server dependencies
+Install server dependencies
+
 	cd ../server
 	npm install
 
