@@ -30,11 +30,11 @@ cd kanban
 
 2. **Install dependencies**
 
-# Install client dependencies
+Install client dependencies
 cd client
 npm install
 
-# Install server dependencies
+Install server dependencies
 cd ../server
 npm install
 
