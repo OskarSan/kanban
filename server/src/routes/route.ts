@@ -16,9 +16,9 @@ interface CustomRequest extends Request {
 
 const router: Router = Router();
 
+// updates the order of the users cards when dragged and dropped
 router.post('/api/updateUser',validateToken, async (req: CustomRequest, res: Response) => {
     try {
-        
         console.log(req.body);
         console.log(req.user);       
         const newOrder = req.body.newOrder;
@@ -27,7 +27,6 @@ router.post('/api/updateUser',validateToken, async (req: CustomRequest, res: Res
             res.status(401).json({ message: 'User not authenticated' });
             return;
         }
-
         const user = await User.findById(userId);
 
         if (!user) {
@@ -44,6 +43,7 @@ router.post('/api/updateUser',validateToken, async (req: CustomRequest, res: Res
     }   
 });
 
+//adds a new card to the database with empty array as content
 router.post('/api/addNewCard', validateToken, async (req: CustomRequest, res: Response) => {
     try {
         const userId = req.user?.id;
@@ -91,7 +91,6 @@ router.post('/api/addNewTask', async (req: Request, res: Response) => {
 
 //updates card content, whatever changes are made to the card
 //handles also the addition of a new cardEntry
-
 router.post('/api/updateCard', async (req: Request, res: Response) => {
     try {
         const {_id, title, content, status} = req.body;
@@ -140,7 +139,7 @@ router.post('/api/deleteCard', async (req: Request, res: Response) => {
     }
 });
 
-
+//gets all cards from the database, used by the admin account
 router.get('/api/getCards', validateToken, async (req: CustomRequest, res: Response): Promise<void> => {
     try {
         const cards = await KanBanCard.find().populate('content');
@@ -187,6 +186,8 @@ router.get('/api/getUsersCards', validateToken, async (req: CustomRequest, res: 
     }
 });
 
+
+//gets the tasks for a given card
 router.get('/api/getTasks', async (req: Request, res: Response) => {
     try {
         const tasks = await KanBanCardContent.find();
@@ -196,7 +197,8 @@ router.get('/api/getTasks', async (req: Request, res: Response) => {
     }
 });
 
-
+//updates a task, timestamp is not given by the request but is handled only in the backend and
+//send to the frontend
 router.post('/api/editTask', async (req: Request, res: Response) => {
     try {
         const { _id, title, content, status } = req.body;

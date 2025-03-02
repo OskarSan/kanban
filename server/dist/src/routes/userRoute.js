@@ -13,6 +13,9 @@ const User_1 = require("../models/User");
 //import { validateToken } from '../middleware/validateToken'
 const google_passport_config_1 = __importDefault(require("../middleware/google-passport-config"));
 const userRouter = (0, express_1.Router)();
+//registers a new user to the database with username and password
+//sets users cards to an empty array
+//isAdmin is set to false by default and there is no way to change it in the frontend
 userRouter.post("/register", (0, express_validator_1.body)('username').isString().trim().isLength({ min: 3 }).escape(), (0, express_validator_1.body)('password').isString().isLength({ min: 5 }).escape(), async (req, res) => {
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {
@@ -27,11 +30,9 @@ userRouter.post("/register", (0, express_validator_1.body)('username').isString(
         }
         const salt = await bcrypt_1.default.genSaltSync(10);
         const hashedPassword = await bcrypt_1.default.hash(req.body.password, salt);
-        //const newBoard = await Board.create({Id: user._id });
         await User_1.User.create({
             username: req.body.username,
             password: hashedPassword,
-            //board: newBoard,
             cardIds: [],
             isAdmin: req.body.isAdmin,
         });
@@ -42,6 +43,7 @@ userRouter.post("/register", (0, express_validator_1.body)('username').isString(
         return;
     }
 });
+//logins with username and password
 userRouter.post("/login", (0, express_validator_1.body)('username').isString().trim().escape(), (0, express_validator_1.body)('password').isString().escape(), async (req, res) => {
     let isAdmin = false;
     try {
@@ -81,7 +83,14 @@ userRouter.post("/login", (0, express_validator_1.body)('username').isString().t
 });
 //code for google login made by Erno Vanhala and fetched 
 //from: https://github.com/Gessle/awa-google-auth
+//edited to fit the project
+//redirects to google login
 userRouter.get('/auth/google', google_passport_config_1.default.authenticate('google', { scope: ['profile'] }));
+//callback for google login
+//creates a new user if the user does not exist in the database
+//the google login works by redirecting the user to the backend for authentication and then
+//redirecting the user back to the frontend with a token
+//May be a security risk
 userRouter.get('/auth/google/callback', google_passport_config_1.default.authenticate('google', { failureRedirect: '/user/login', session: false }), async (req, res) => {
     try {
         const user = await User_1.User.findOne({ googleId: req.user.id });

@@ -14,6 +14,9 @@ import passport from '../middleware/google-passport-config'
 
 const userRouter: Router = Router()
 
+//registers a new user to the database with username and password
+//sets users cards to an empty array
+//isAdmin is set to false by default and there is no way to change it in the frontend
 userRouter.post("/register",
     body('username').isString().trim().isLength({ min: 3 }).escape(),
     body('password').isString().isLength({ min: 5 }).escape(),
@@ -33,12 +36,9 @@ userRouter.post("/register",
             const salt: string = await bcrypt.genSaltSync(10)
             const hashedPassword: string = await bcrypt.hash(req.body.password, salt)
             
-            //const newBoard = await Board.create({Id: user._id });
-            
             await User.create({
                 username: req.body.username,
                 password: hashedPassword,
-                //board: newBoard,
                 cardIds: [],
                 isAdmin: req.body.isAdmin,
             })
@@ -50,7 +50,7 @@ userRouter.post("/register",
         }
     }
 )
-
+//logins with username and password
 userRouter.post("/login",
     body('username').isString().trim().escape(),
     body('password').isString().escape(),
@@ -98,8 +98,17 @@ userRouter.post("/login",
 )
 //code for google login made by Erno Vanhala and fetched 
 //from: https://github.com/Gessle/awa-google-auth
+//edited to fit the project
 
+//redirects to google login
 userRouter.get('/auth/google', passport.authenticate('google', {scope: ['profile']}))
+
+//callback for google login
+//creates a new user if the user does not exist in the database
+
+//the google login works by redirecting the user to the backend for authentication and then
+//redirecting the user back to the frontend with a token
+//May be a security risk
 
 userRouter.get('/auth/google/callback', 
     passport.authenticate('google', {failureRedirect: '/user/login', session: false}), 

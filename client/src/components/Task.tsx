@@ -1,8 +1,11 @@
 //dialog code from: https://mui.com/material-ui/react-dialog/
 
 
+
+
+
 import React from "react";
-import "./CardEntry.css";
+import "./Task.css";
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -25,6 +28,8 @@ interface CardProps {
     onStatusChange: () => void;
     onTaskDeleted: (taskId: string) => void;
     onTaskUpdated: (updatedTask: Task) => void;
+    
+    //drag and drop functions
     onDragStartTask: (taskId: string) => void;
     onDragOverTask: (event: React.DragEvent<HTMLDivElement>) => void;
     onDropTask: (event: React.DragEvent<HTMLDivElement>, taskId: string) => void;
@@ -34,9 +39,10 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ task, onStatusChange, onTaskDeleted, onTaskUpdated, onDragStartTask: onDragStartTask, onDragOverTask: onDragOverTask, onDropTask: onDropTask}) => {
     
-    //menu
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
+
+    //handles the opening of the popup menu of the car
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         event.stopPropagation();
         setAnchorEl(event.currentTarget);
@@ -74,7 +80,7 @@ const Card: React.FC<CardProps> = ({ task, onStatusChange, onTaskDeleted, onTask
         setEditedTask({...editedTask, [e.target.name]: e.target.value});
     };
 
-
+    //handles the saving of the edited task
     const handleEditSave = async () => {
         try{
             const res = await fetch('/api/editTask', {
@@ -101,6 +107,7 @@ const Card: React.FC<CardProps> = ({ task, onStatusChange, onTaskDeleted, onTask
         setIsEditing(false);
         setEditedTask({...task});
     };
+
 
     const formattedTimeStamp = new Date(task.timeStamp).toLocaleString();
 

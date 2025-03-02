@@ -1,4 +1,6 @@
 "use strict";
+// Code to configure Google OAuth2.0 with passport.js
+// Code made by Erno Vanhala: https://github.com/Gessle/awa-google-auth/blob/main/src/middleware/google-passport-config.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };

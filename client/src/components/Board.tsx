@@ -29,7 +29,7 @@ const Board: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-
+        //fetches the cards based on the token happens when the page is loaded, token is updated or a card is deleted
         const fetchCards = async () => {
 
             if(!token) {
@@ -57,7 +57,10 @@ const Board: React.FC = () => {
         fetchCards();
     }, [token, navigate, fetchTrigger]);
 
+    
     const handleAddCard = async () => {
+        //gives card a random id and adds it to the database. Not necessarily needed because of the mongo indexing
+        //but i dont want to touch it currently in the fear of god.
         var randomId = Math.floor(Math.random() * 1000);
         const newCard = {id: randomId, title: "New Card", content: [], status: "todo"};
         
@@ -136,10 +139,13 @@ const Board: React.FC = () => {
         }
     };
 
+
     const handleCardDeleted = () => {
         setFetchTrigger(!fetchTrigger);
     };
 
+
+    //drag and drop functions
     const handleDragStartCard = (cardId: number) => {
         setDraggedCardId(cardId);
     };
@@ -148,6 +154,8 @@ const Board: React.FC = () => {
         e.preventDefault();
     }
 
+    //fancy looking drop function, syntax asked from Copilot :)
+    //handles the indexing of the card when dropped
     const handleDropCard = (e: React.DragEvent<HTMLDivElement>, targetCardId: number) => {
         e.preventDefault();
         if(draggedCardId ===null) return;

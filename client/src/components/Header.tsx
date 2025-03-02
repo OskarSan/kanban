@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+//styling for the login and logout buttons
 const LoginButton = styled(Button)({
     backgroundColor: '#4CAF50',
     color: 'white',
@@ -29,9 +30,16 @@ const LogoutButton = styled(Button)({
     },
 });
 
+
+
 const Header: React.FC = () => {
+
+
     const navigate = useNavigate(); 
     const token = localStorage.getItem('auth_token');
+
+
+    //handling for the buttons in the header
     const handleLoginClick = () => {
         navigate('/login');
     };

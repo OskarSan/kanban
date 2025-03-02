@@ -1,4 +1,6 @@
 "use strict";
+//model for the task. Incorrectly named as kanBanCardContent.
+//this model is used to store the content of the task
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);

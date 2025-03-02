@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import { Card, CardContent, Typography, Grid2, Button, Menu, MenuItem, IconButton, Dialog, DialogTitle, DialogContent, TextField, DialogActions } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import CardEntry from './CardEntry';
+import CardEntry from './Task';
 
 import './KanBanCard.css';
 
@@ -38,12 +38,13 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted, onD
     const [draggedTaskId, setDraggedTaskId] = React.useState<string | null>(null);
 
 
-
+    //sets the tasks to the card content
     useEffect(() => {
         setTasks(card.content);
     }, [card.content]);
 
     
+    //creates a new task, gives it default values and adds it to the card
     const handleAddTask = async () => {
         const newTask = {title: "New Task", content: "New Content", status: "todo", timeStamp: new Date()};
 
@@ -68,6 +69,7 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted, onD
         }
     };
 
+    //handles the changing of the cards status when clicked
     const handleStatusChange = (taskId: string) => {
         const updatedTasks = tasks.map(task => {
             if (task._id === taskId) {
@@ -115,6 +117,8 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted, onD
         event.preventDefault();
     };
 
+    //handles the dropping of the tasks and makes sure that the tasks are in the correct order
+    //syntax asked from chatGPT :)
     const handleDropTask = (event: React.DragEvent<HTMLDivElement>, targetTaskId: string) => {
         event.preventDefault();
         if (draggedTaskId === null) return;
@@ -138,15 +142,18 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted, onD
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     
+
+    //opens the popup menu
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
       setAnchorEl(event.currentTarget);
     };
 
+    
     const handleEditCard = () => {
         setIsEditing(true);
-        
         setAnchorEl(null);  
     }
+
 
     const handleDeleteCard = async () => {
         const res = await fetch('/api/deleteCard', {
@@ -156,16 +163,18 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted, onD
             },
             body: JSON.stringify(card)
         });
-
         const data = await res.json();
         console.log(data);
 
         onCardDeleted();
         setAnchorEl(null);
     }
+
+    //closes the popup menu
     const handleClose = () => {
         setAnchorEl(null);
     };
+
 
     /*dialog config*/
     const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -207,6 +216,7 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted, onD
                 onDragOver={onDragOverCard}
                 onDrop={(event) => onDropCard(event, card.id)}
             >
+                {/*if user is admin, shows the owner of the card*/}
                 {localStorage.getItem('isAdmin') === 'true' && (
                     <Typography variant="h6" component="h1" sx={{ flexGrow: 1, fontSize: '0.875rem' }}>
                         Created By: {card.createdBy}
@@ -250,9 +260,7 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted, onD
                     </div>
                 </div>  
                 
-                <CardContent className="cardContent" /*onDragOver={enableDropping} onDrop={handleDrop}*/>
-                   
-                   
+                <CardContent className="cardContent">
                     {card.content.map((entry) => (
                        <React.Fragment key={entry._id}>
                             <CardEntry
@@ -296,9 +304,6 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted, onD
                     </Button>
                 </DialogActions>
             </Dialog>
-
-
-
         </Grid2>
     )
 }

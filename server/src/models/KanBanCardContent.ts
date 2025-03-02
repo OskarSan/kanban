@@ -1,4 +1,7 @@
 
+//model for the task. Incorrectly named as kanBanCardContent.
+//this model is used to store the content of the task
+
 import { time } from "console";
 import mongoose, {Schema, Document} from "mongoose";
 

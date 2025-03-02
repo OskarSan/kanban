@@ -1,3 +1,6 @@
+//kanbanCard model
+
+
 import mongoose, {Schema, Document} from "mongoose";
 import {KanBanCardContent, IKanBanCardContent } from "./KanBanCardContent";
 

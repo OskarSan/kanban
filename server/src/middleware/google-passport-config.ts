@@ -1,3 +1,7 @@
+// Code to configure Google OAuth2.0 with passport.js
+// Code made by Erno Vanhala: https://github.com/Gessle/awa-google-auth/blob/main/src/middleware/google-passport-config.ts
+
+
 import passport from 'passport';
 import { Strategy, Profile} from 'passport-google-oauth20';
 

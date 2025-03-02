@@ -19,6 +19,7 @@ import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 
 
+//register card styling
 const Card = styled(MuiCard)(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
@@ -109,6 +110,7 @@ const Register = () => {
         
     };
 
+    
     const validateInputs = () => {
         const username = document.getElementById('username') as HTMLInputElement;
         const password = document.getElementById('password') as HTMLInputElement;

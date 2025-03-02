@@ -6,6 +6,7 @@ const KanBanCardContent_1 = require("../models/KanBanCardContent");
 const User_1 = require("../models/User");
 const validateToken_1 = require("../middleware/validateToken");
 const router = (0, express_1.Router)();
+// updates the order of the users cards when dragged and dropped
 router.post('/api/updateUser', validateToken_1.validateToken, async (req, res) => {
     try {
         console.log(req.body);
@@ -31,6 +32,7 @@ router.post('/api/updateUser', validateToken_1.validateToken, async (req, res) =
         res.status(500).json({ message: error.message });
     }
 });
+//adds a new card to the database with empty array as content
 router.post('/api/addNewCard', validateToken_1.validateToken, async (req, res) => {
     try {
         const userId = req.user?.id;
@@ -106,6 +108,7 @@ router.post('/api/deleteCard', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+//gets all cards from the database, used by the admin account
 router.get('/api/getCards', validateToken_1.validateToken, async (req, res) => {
     try {
         const cards = await KanBanCard_1.KanBanCard.find().populate('content');
@@ -147,6 +150,7 @@ router.get('/api/getUsersCards', validateToken_1.validateToken, async (req, res)
         res.status(500).json({ message: error.message });
     }
 });
+//gets the tasks for a given card
 router.get('/api/getTasks', async (req, res) => {
     try {
         const tasks = await KanBanCardContent_1.KanBanCardContent.find();
@@ -156,6 +160,8 @@ router.get('/api/getTasks', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+//updates a task, timestamp is not given by the request but is handled only in the backend and
+//send to the frontend
 router.post('/api/editTask', async (req, res) => {
     try {
         const { _id, title, content, status } = req.body;

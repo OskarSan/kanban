@@ -18,7 +18,7 @@ import MuiCard from '@mui/material/Card';
 import Link from '@mui/material/Link';
 import { styled } from '@mui/material/styles';
 
-
+//styling for the login card
 const Card = styled(MuiCard)(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
@@ -77,6 +77,8 @@ const LoginPage = () => {
 
 
     const navigate = useNavigate();
+
+    //useEffect for if token exists, set it in local storage and navigate to the home page
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get('token');
@@ -95,7 +97,6 @@ const LoginPage = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
         try{
             const res = await fetch('/user/login', {
                 method: 'POST',
