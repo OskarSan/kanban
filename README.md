@@ -15,17 +15,17 @@ This project is a Kanban board application built with React, TypeScript, and Vit
 
 Follow these instructions to get a copy of the project up and running on your local machine.
 
-### Prerequisites
+## Prerequisites
 
 - Node.js (v14 or higher)
 - npm (v6 or higher)
 - MongoDB
 
-### Installation
+## Installation
 
-1. **Clone the Repository**
+### 1. **Clone the Repository**
 
-2. **Install dependencies**
+### 2. **Install dependencies**
 
 ### Install client dependencies
 	cd client
@@ -35,7 +35,7 @@ Follow these instructions to get a copy of the project up and running on your lo
 	cd ../server
 	npm install
 
-3. **Set Up Environment Variables**
+### 3. **Set Up Environment Variables**
 
 Create  .env file in the client directory with the following content:
 
