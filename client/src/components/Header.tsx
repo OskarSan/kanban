@@ -72,7 +72,7 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
                         Kanban Board
                     </Typography>
                     
-                    <Button className="buttonSpacing" color="inherit" onClick={handleHomeClick}>Home</Button>
+            
                     {token ? (
                         <>
                             <TextField

@@ -17,6 +17,7 @@ import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import Link from '@mui/material/Link';
 import { styled } from '@mui/material/styles';
+import Header from './Header';
 
 //styling for the login card
 const Card = styled(MuiCard)(({ theme }) => ({

@@ -84,6 +84,7 @@ const Board: React.FC = () => {
                 const data = await response.json();
                 console.log("card to be added: ", data);
                 setCards([...cards, data.kanBanCard]);
+                setFilteredCards([...filteredCards, data.kanBanCard]);
             }
         } catch (error) {
             console.log("card adding failed:", error);
@@ -98,6 +99,7 @@ const Board: React.FC = () => {
         setFilteredCards((prevCards) =>
             prevCards.map((card) => (card.id === updatedCard.id ? updatedCard : card))
         );
+
         console.log(cards)
         try {
             const res = await fetch('/api/updateCard', {
@@ -176,6 +178,7 @@ const Board: React.FC = () => {
         updatedCards.splice(targetCardIndex, 0, draggedCard);
         console.log(updatedCards)
         setCards(updatedCards); 
+        setFilteredCards(updatedCards);
         handleUpdateCardsOrder(updatedCards);
         setDraggedCardId(null);
 
