@@ -7,7 +7,7 @@ https://docs.google.com/document/d/1UA36PO3Fs6jezjKjuvH8E47mvYMIMO9JvEwt5WzLt3Y/
 
 
 
-# Kanban Project
+### Kanban Project
 
 This project is a Kanban board application built with React, TypeScript, and Vite for the client, and Express, TypeScript, and MongoDB for the server.
 
@@ -15,13 +15,13 @@ This project is a Kanban board application built with React, TypeScript, and Vit
 
 Follow these instructions to get a copy of the project up and running on your local machine.
 
-###Prerequisites
+#Prerequisites
 
 - Node.js (v14 or higher)
 - npm (v6 or higher)
 - MongoDB
 
-###Installation
+#Installation
 
 1. **Clone the Repository**
 
