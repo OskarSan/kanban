@@ -55,4 +55,8 @@ Create .env file in the server directory with the following content:
 
 4. **Run the project**
 
-Navigate to the root folder and “npm run start”
+Navigate to the root folder and “npm run start”. This will start the clien and server concurrently
+
+## User manual
+
+https://docs.google.com/document/d/1o-tMQymdOserdS7oSwS2K58ISiGjOKIakgNh8V27CYA/edit?usp=sharing
