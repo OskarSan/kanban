@@ -99,7 +99,7 @@ const LoginPage = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try{
-            const res = await fetch('/user/login', {
+            const res = await fetch(`${import.meta.env.VITE_AUTH_SERVICE_URL}/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -148,9 +148,6 @@ const LoginPage = () => {
     
         return isValid;
       };
-    
-
-    
     
   
     const handleGoogleSignIn = async () => {

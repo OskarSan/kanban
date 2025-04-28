@@ -18,7 +18,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "client": "npm run dev --prefix client",
     "server": "npm run start --prefix server",
-    "start": "concurrently \"npm run client\" \"npm run server\""
+    "auth-service": "npm run start --prefix auth-service",
+    "board-service": "npm run start --prefix board-service",
+    "start": "concurrently \"npm run client\" \"npm run auth-service\" \"npm run board-service\""
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -41,6 +43,7 @@
   },
   "devDependencies": {
     "@types/passport": "^1.0.17",
-    "@types/passport-google-oauth20": "^2.0.16"
+    "@types/passport-google-oauth20": "^2.0.16",
+    "tsc-watch": "^6.2.1"
   }
 }

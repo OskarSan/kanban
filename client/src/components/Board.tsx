@@ -38,7 +38,8 @@ const Board: React.FC = () => {
                 return;
             }
             try {
-                const response = await fetch('/api/getUsersCards', {
+                console.log("fetching cards", token)
+                const response = await fetch(`${import.meta.env.VITE_BOARD_SERVICE_URL}/api/getUsersCards`, {
                     headers: {
                         "authorization": `Bearer ${token}`
                     }
@@ -68,7 +69,7 @@ const Board: React.FC = () => {
         const newCard = {id: randomId, title: "New Card", content: [], status: "todo"};
         
         try {
-            const response = await fetch('/api/addNewCard', {
+            const response = await fetch(`${import.meta.env.VITE_BOARD_SERVICE_URL}/api/addNewCard`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -102,7 +103,7 @@ const Board: React.FC = () => {
 
         console.log(cards)
         try {
-            const res = await fetch('/api/updateCard', {
+            const res = await fetch(`${import.meta.env.VITE_BOARD_SERVICE_URL}/api/updateCard`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -129,7 +130,7 @@ const Board: React.FC = () => {
         try{
             const newOrder = updatedCards.map(card => card._id);
             console.log(newOrder)
-            const res = await fetch('/api/updateUser', {
+            const res = await fetch(`${import.meta.env.VITE_BOARD_SERVICE_URL}/api/updateUser`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

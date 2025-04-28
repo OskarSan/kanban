@@ -52,7 +52,7 @@ const Card: React.FC<CardProps> = ({ task, onStatusChange, onTaskDeleted, onTask
     };
     
     const handleDeleteTask = async () => {
-        const res = await fetch('/api/deleteTask', {
+        const res = await fetch(`${import.meta.env.VITE_BOARD_SERVICE_URL}/api/deleteTask`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -83,7 +83,7 @@ const Card: React.FC<CardProps> = ({ task, onStatusChange, onTaskDeleted, onTask
     //handles the saving of the edited task
     const handleEditSave = async () => {
         try{
-            const res = await fetch('/api/editTask', {
+            const res = await fetch(`${import.meta.env.VITE_BOARD_SERVICE_URL}/api/editTask`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

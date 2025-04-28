@@ -49,7 +49,7 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted, onD
         const newTask = {title: "New Task", content: "New Content", status: "todo", timeStamp: new Date()};
 
         try{
-            const response = await fetch('/api/addNewTask', {
+            const response = await fetch(`${import.meta.env.VITE_BOARD_SERVICE_URL}/api/addNewTask`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -156,7 +156,7 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted, onD
 
 
     const handleDeleteCard = async () => {
-        const res = await fetch('/api/deleteCard', {
+        const res = await fetch(`${import.meta.env.VITE_BOARD_SERVICE_URL}/api/deleteCard`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -184,7 +184,7 @@ const KanBanCard: React.FC<CardProps> = ({card, onUpdateCard, onCardDeleted, onD
     const handleEditSave = async () => {
         const updatedCard = { ...card, title: editedTitle };
         try {
-            const res = await fetch('/api/updateCard', {
+            const res = await fetch(`${import.meta.env.VITE_BOARD_SERVICE_URL}/api/updateCard`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

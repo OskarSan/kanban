@@ -2,3 +2,7 @@
 /node_modules
 /server/.env
 /client/.env
+/auth-service/node_modules
+/board-service/node_modules
+/board-service/.env
+/auth-service/.env

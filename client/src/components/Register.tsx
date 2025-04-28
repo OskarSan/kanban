@@ -88,7 +88,7 @@ const Register = () => {
         e.preventDefault();
         
         try {
-            const res = await fetch('/user/register', {
+            const res = await fetch(`${import.meta.env.VITE_AUTH_SERVICE_URL}/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
