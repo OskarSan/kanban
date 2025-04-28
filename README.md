@@ -1,8 +1,5 @@
-Github Link:
-https://github.com/OskarSan/kanban
 
-
-# Kanban 
+# Distributed KanBan System
 
 This is a Kanban board system built with MERN stack. 
 The backend is split into two microservices, "auth-service" and "board-service".
