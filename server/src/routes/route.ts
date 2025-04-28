@@ -1,5 +1,5 @@
 import {Router, Request, Response} from 'express'; 
-import { KanBanCard, IKanBanCard } from '../models/kanbanCard';
+import { KanBanCard, IKanBanCard } from '../models/KanBanCard';
 import { KanBanCardContent, IKanBanCardContent } from '../models/KanBanCardContent';
 import { User, IUser } from '../models/User';
 import {validateToken} from '../middleware/validateToken';
