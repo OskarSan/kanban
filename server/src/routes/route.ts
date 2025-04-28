@@ -1,5 +1,5 @@
 import {Router, Request, Response} from 'express'; 
-import { KanBanCard, IKanBanCard } from '../models/KanBanCard';
+import { KanBanCard, IKanBanCard } from '../models/kanbanCard';
 import { KanBanCardContent, IKanBanCardContent } from '../models/KanBanCardContent';
 import { User, IUser } from '../models/User';
 import {validateToken} from '../middleware/validateToken';
@@ -25,21 +25,25 @@ router.post('/api/updateUser',validateToken, async (req: CustomRequest, res: Res
         const userId = req.user?.id;
         if (!userId) {
             res.status(401).json({ message: 'User not authenticated' });
-            return;
+            
         }
         const user = await User.findById(userId);
 
         if (!user) {
             res.status(404).json({ message: 'User not found' });
-            return;
+            
+        }else{
+            console.log(user.cardIds);
+            user.cardIds = newOrder;
+            user.save();
+            console.log(user.cardIds);
+            res.status(200).json({message: 'Cards updated successfully'});
+            
         }
-        console.log(user.cardIds);
-        user.cardIds = newOrder;
-        user.save();
-        console.log(user.cardIds);
-        res.status(200).json({message: 'Cards updated successfully'});
+        
     } catch (error: any) {
         res.status(500).json({message: error.message});
+        
     }   
 });
 

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const KanBanCard_1 = require("../models/KanBanCard");
+const kanbanCard_1 = require("../models/kanbanCard");
 const KanBanCardContent_1 = require("../models/KanBanCardContent");
 const User_1 = require("../models/User");
 const validateToken_1 = require("../middleware/validateToken");
@@ -15,18 +15,18 @@ router.post('/api/updateUser', validateToken_1.validateToken, async (req, res) =
         const userId = req.user?.id;
         if (!userId) {
             res.status(401).json({ message: 'User not authenticated' });
-            return;
         }
         const user = await User_1.User.findById(userId);
         if (!user) {
             res.status(404).json({ message: 'User not found' });
-            return;
         }
-        console.log(user.cardIds);
-        user.cardIds = newOrder;
-        user.save();
-        console.log(user.cardIds);
-        res.status(200).json({ message: 'Cards updated successfully' });
+        else {
+            console.log(user.cardIds);
+            user.cardIds = newOrder;
+            user.save();
+            console.log(user.cardIds);
+            res.status(200).json({ message: 'Cards updated successfully' });
+        }
     }
     catch (error) {
         res.status(500).json({ message: error.message });
@@ -41,7 +41,7 @@ router.post('/api/addNewCard', validateToken_1.validateToken, async (req, res) =
             return;
         }
         console.log(req.user);
-        const kanBanCard = new KanBanCard_1.KanBanCard(req.body);
+        const kanBanCard = new kanbanCard_1.KanBanCard(req.body);
         kanBanCard.createdBy = req.user?.username;
         console.log(kanBanCard);
         await kanBanCard.save();
@@ -81,7 +81,7 @@ router.post('/api/updateCard', async (req, res) => {
             }
         });
         const contentIds = await Promise.all(contentPromises);
-        const updatedCard = await KanBanCard_1.KanBanCard.findByIdAndUpdate(_id, {
+        const updatedCard = await kanbanCard_1.KanBanCard.findByIdAndUpdate(_id, {
             title: title,
             content: contentIds,
             status: status
@@ -98,7 +98,7 @@ router.post('/api/updateCard', async (req, res) => {
 router.post('/api/deleteCard', async (req, res) => {
     try {
         const { _id } = req.body;
-        const card = await KanBanCard_1.KanBanCard.findByIdAndDelete(_id);
+        const card = await kanbanCard_1.KanBanCard.findByIdAndDelete(_id);
         if (!card) {
             res.status(404).json({ message: 'Card not found' });
         }
@@ -111,7 +111,7 @@ router.post('/api/deleteCard', async (req, res) => {
 //gets all cards from the database, used by the admin account
 router.get('/api/getCards', validateToken_1.validateToken, async (req, res) => {
     try {
-        const cards = await KanBanCard_1.KanBanCard.find().populate('content');
+        const cards = await kanbanCard_1.KanBanCard.find().populate('content');
         res.status(200).json(cards);
     }
     catch (error) {
@@ -135,11 +135,11 @@ router.get('/api/getUsersCards', validateToken_1.validateToken, async (req, res)
             return;
         }
         if (user.isAdmin == true) {
-            const cards = await KanBanCard_1.KanBanCard.find().populate('content');
+            const cards = await kanbanCard_1.KanBanCard.find().populate('content');
             res.status(200).json(cards);
             return;
         }
-        const cards = await KanBanCard_1.KanBanCard.find({ _id: { $in: user.cardIds } }).populate('content');
+        const cards = await kanbanCard_1.KanBanCard.find({ _id: { $in: user.cardIds } }).populate('content');
         const sortedCards = cards.sort((a, b) => {
             return user.cardIds.indexOf(a._id) - user.cardIds.indexOf(b._id);
         });
