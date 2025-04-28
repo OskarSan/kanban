@@ -2,14 +2,20 @@ Github Link:
 https://github.com/OskarSan/kanban
 
 
-Link for the project documentation docs:
-https://docs.google.com/document/d/1Oq7tz8XcPaLkwwmJpHKAkU7TjbUbdFjEsBREsLTuFFI/edit?usp=sharing
+# Kanban 
+
+This is a Kanban board system built with MERN stack. 
+The backend is split into two microservices, "auth-service" and "board-service".
+
+auth-service is responsible for the user authentication as well as authorization. 
+board-service handles the board maintenance.
+
+The two services communicate with each other with REST APIs.
+
+Example workflow of the system
+![workflow drawio(1)](https://github.com/user-attachments/assets/8dfba7ac-2cbc-441c-8f97-b76238ae92e2)
 
 
-
-# Kanban Project
-
-This project is a Kanban board application built with React, TypeScript, and Vite for the client, and Express, TypeScript, and MongoDB for the server.
 
 ## Getting Started
 
@@ -31,35 +37,43 @@ install project dependencies
 
 	npm install
 
-Install client dependencies
+Install front-end dependencies
 
 	cd client
 	npm install
 
-Install server dependencies
+Install back-end dependencies
 
-	cd ../server
+	cd ../auth-service
 	npm install
+ 	cd ../board-service
+  	npm install
 
 ### 3. **Set Up Environment Variables**
 
 Create  .env file in the client directory with the following content:
 
-	VITE_API_URL = http://localhost:3000
+	VITE_GOOGLE_CLIENT_ID = your_google_client_id
+ 	VITE_BOARD_SERVICE_URL = http://localhost:5000
+	VITE_AUTH_SERVICE_URL = http://localhost:4000
 
-Create .env file in the server directory with the following content: 
-	
-	PORT=3000
+Create .env file in the auth-service directory with the following content: 
+
+ 	PORT = 4000
 	MONGODB_URI = your_mongodb_connection_string
 	JWT_SECRET = your_jwt_secret
 	GOOGLE_CLIENT_ID = your_google_client_id
 	GOOGLE_CLIENT_SECRET = your_google_client_secret
 	GOOGLE_CALLBACK_URL = http://localhost:3000/user/auth/google/callback
 
+Create .env file in the board-service directory with the following content: 
+
+ 	PORT = 5000
+	MONGODB_URI = mongodb://localhost:27017/kanban
 
 4. **Run the project**
 
-Navigate to the root folder and “npm run start”. This will start the clien and server concurrently
+Navigate to the root folder and “npm run start”. This will start the client, auth-service and board-service concurrently
 
 ## User manual
 
