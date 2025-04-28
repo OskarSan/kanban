@@ -20,7 +20,6 @@ const validateToken = async (req, res, next) => {
         // Check if the response from the auth-service is successful
         if (response.status === 200) {
             // Attach the user information from the auth-service to the request object
-            console.log("user from auth service", response.data);
             req.user = response.data;
             next(); // Proceed to the next middleware or route handler
         }
