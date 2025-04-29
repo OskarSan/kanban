@@ -7,7 +7,7 @@ The backend is split into two microservices, "auth-service" and "board-service".
 auth-service is responsible for the user authentication as well as authorization. 
 board-service handles the board maintenance.
 
-The two services communicate with each other with REST APIs.
+The two services communicate with each other, as well as with client, through REST APIs.
 
 ### Example workflow of the system
 The steps are numbered in order of execution from 1-6. n:th steps indicate interactions that happen only conditionally (Google auth), or all the time (db interactions) 
