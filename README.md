@@ -10,6 +10,7 @@ board-service handles the board maintenance.
 The two services communicate with each other with REST APIs.
 
 ### Example workflow of the system
+The steps are numbered from 1-
 ![workflow drawio(1)](https://github.com/user-attachments/assets/8dfba7ac-2cbc-441c-8f97-b76238ae92e2)
 
 
