@@ -7,9 +7,11 @@ The backend is split into two microservices, "auth-service" and "board-service".
 auth-service is responsible for the user authentication as well as authorization. 
 board-service handles the board maintenance.
 
-The two services communicate with each other with REST APIs.
+The two services communicate with each other, as well as with client, through REST APIs.
 
 ### Example workflow of the system
+The steps are numbered in order of execution from 1-6. n:th steps indicate interactions that happen only conditionally (Google auth), or all the time (db interactions) 
+
 ![workflow drawio(1)](https://github.com/user-attachments/assets/8dfba7ac-2cbc-441c-8f97-b76238ae92e2)
 
 
@@ -61,7 +63,7 @@ Create .env file in the auth-service directory with the following content:
 	JWT_SECRET = your_jwt_secret
 	GOOGLE_CLIENT_ID = your_google_client_id
 	GOOGLE_CLIENT_SECRET = your_google_client_secret
-	GOOGLE_CALLBACK_URL = http://localhost:3000/user/auth/google/callback
+	GOOGLE_CALLBACK_URL = http://localhost:4000/auth/google/callback
 
 Create .env file in the board-service directory with the following content: 
 
