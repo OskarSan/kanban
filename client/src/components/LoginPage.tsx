@@ -151,7 +151,7 @@ const LoginPage = () => {
     
   
     const handleGoogleSignIn = async () => {
-        window.location.href = 'http://localhost:3000/user/auth/google';
+        window.location.href = `${import.meta.env.VITE_AUTH_SERVICE_URL}/auth/google`;
     };
 
     return (

@@ -8,7 +8,6 @@ import authServiceRouter from './src/routes/authServiceRouter'
 
 dotenv.config()
 
-
 const app: Express = express();
 const port: number = parseInt(process.env.PORT as string) || 4000;
 const uri: string = process.env.MONGODB_URI as string; 

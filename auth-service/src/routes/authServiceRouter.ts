@@ -3,6 +3,7 @@ import { body, Result, ValidationError, validationResult } from 'express-validat
 import bcrypt from 'bcrypt'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import { User, IUser } from '../models/User'
+import passport from '../middleware/google-passport-config'
 
 
 const authServiceRouter = express.Router();
@@ -10,6 +11,7 @@ const authServiceRouter = express.Router();
 interface CustomRequest extends Request {
     user?: JwtPayload
 }
+
 
 // Register a new user
 authServiceRouter.post('/register', async (req: Request, res: Response) => {
@@ -81,5 +83,52 @@ authServiceRouter.get('/validate-token', async (req: Request, res: Response) => 
         res.status(400).json({message: "Access denied, missing token"})
     }
   });
+
+
+//code for google login made by Erno Vanhala and fetched 
+//from: https://github.com/Gessle/awa-google-auth
+//edited to fit the project
+
+//redirects to google login
+authServiceRouter.get('/auth/google', passport.authenticate('google', {scope: ['profile']}))
+
+//callback for google login
+//creates a new user if the user does not exist in the database
+
+//the google login works by redirecting the user to the backend for authentication and then
+//redirecting the user back to the frontend with a token
+//May be a security risk
+
+authServiceRouter.get('/auth/google/callback', 
+    passport.authenticate('google', {failureRedirect: '/login', session: false}), 
+    async (req: Request, res: Response) => {
+        try{
+            const user: IUser | null = await User.findOne({googleId: (req.user as {id: string}).id})
+            const jwtPayload: JwtPayload = {}
+            if(!user) {
+                const newUser: IUser = await User.create({
+                    username: (req.user as {displayName: string}).displayName,
+                    googleId: (req.user as {id: string}).id,
+                    cardIds: []
+                })
+                jwtPayload.username = newUser.username
+                jwtPayload.id = newUser._id
+                jwtPayload.googleId = newUser.googleId
+            } else { 
+                jwtPayload.username = user.username
+                jwtPayload.id = user._id
+                jwtPayload.googleId = user.googleId
+            }
+
+            const token: string = jwt.sign(jwtPayload, process.env.JWT_SECRET as string, {expiresIn: "5m"})
+            //this is bad practice, but for the sake of simplicity, we redirect to localhost
+            res.redirect(`http://localhost:1234/login?token=${token}`);
+
+        } catch(error: any) {
+            console.error(`Error during during external login: ${error}`)
+            res.status(500).json({ error: 'Internal Server Error' })
+        }
+    }
+)
 
 export default authServiceRouter;
