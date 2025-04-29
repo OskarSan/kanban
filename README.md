@@ -63,7 +63,7 @@ Create .env file in the auth-service directory with the following content:
 	JWT_SECRET = your_jwt_secret
 	GOOGLE_CLIENT_ID = your_google_client_id
 	GOOGLE_CLIENT_SECRET = your_google_client_secret
-	GOOGLE_CALLBACK_URL = http://localhost:3000/user/auth/google/callback
+	GOOGLE_CALLBACK_URL = http://localhost:4000/auth/google/callback
 
 Create .env file in the board-service directory with the following content: 
 
