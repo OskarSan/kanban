@@ -10,7 +10,8 @@ board-service handles the board maintenance.
 The two services communicate with each other with REST APIs.
 
 ### Example workflow of the system
-The steps are numbered from 1-6, in order of execution. n:th steps indicate steps that happen only conditionally (Google auth), or all the time (db interactions) 
+The steps are numbered in order of execution from 1-6. n:th steps indicate interactions that happen only conditionally (Google auth), or all the time (db interactions) 
+
 ![workflow drawio(1)](https://github.com/user-attachments/assets/8dfba7ac-2cbc-441c-8f97-b76238ae92e2)
 
 
