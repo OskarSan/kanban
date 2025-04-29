@@ -17,7 +17,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "client": "npm run dev --prefix client",
-    "server": "npm run start --prefix server",
     "auth-service": "npm run start --prefix auth-service",
     "board-service": "npm run start --prefix board-service",
     "start": "concurrently \"npm run client\" \"npm run auth-service\" \"npm run board-service\""
